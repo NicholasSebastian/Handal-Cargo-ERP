@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.function.Consumer;
 
 public class Database {
 	
@@ -35,7 +36,7 @@ public class Database {
 		}
 	}
 	
-	// Query the database
+	// Reading from the database
 	public static ResultSet query(String query) {
 		try {
 			Statement statement = connection.createStatement();
@@ -46,6 +47,19 @@ public class Database {
 			printException(e);
 		}
 		return null;
+	}
+	
+	// Modifying the database
+	public static void update(String query, Consumer<PreparedStatement> setStatement) {
+		try {
+			PreparedStatement statement = connection.prepareStatement(query);
+			setStatement.accept(statement);
+			int i = statement.executeUpdate();
+			System.out.println(i + " records updated.");
+		}
+		catch (SQLException e) {
+			printException(e);
+		}
 	}
 	
 	// Custom error printing format

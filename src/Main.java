@@ -12,15 +12,17 @@ public class Main {
 	    password = "hunter1389";
 
 	public static void main(String[] args) {
-		// Initialize connection with database.
-		Database.loadDriver();
-		Database.loadConnection(hostname, port, databaseName, user, password);
-		
-		// Application runs here.
-		UserInterface app = new UserInterface();
-		app.setVisible(true);
-		
-		// Close the connection.
-		Database.closeConnection();
+		try {
+			// Initialize connection with database.
+			Database.loadDriver();
+			Database.loadConnection(hostname, port, databaseName, user, password);
+			
+			// Run the application.
+			UserInterface app = new UserInterface();
+			app.setVisible(true);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
