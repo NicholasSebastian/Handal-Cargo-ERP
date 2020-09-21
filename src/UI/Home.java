@@ -15,8 +15,8 @@ import UI.Pages.*;
 @SuppressWarnings("serial")
 public class Home extends JFrame {
 	
-	private Dimension defaultWindowSize = new Dimension(1280, 720);
-	private Dimension minimumWindowSize = new Dimension(880, 520);
+	private final Dimension defaultWindowSize = new Dimension(1280, 720);
+	private final Dimension minimumWindowSize = new Dimension(880, 520);
 	
 	private Color
 		headerColor = new Color(0, 119, 182),
@@ -26,7 +26,7 @@ public class Home extends JFrame {
 		sideBarSubButtonColor = new Color(42, 60, 71),
 		sideBarSubButtonHoverColor = new Color(52, 70, 81);
 
-	private Font
+	private final Font
 		logoFont = new Font("Arial", Font.BOLD, 25),
 		profileFont = new Font("Arial", Font.BOLD, 16),
 		sideBarButtonFont = new Font("Arial", Font.BOLD, 16),
@@ -86,6 +86,7 @@ public class Home extends JFrame {
 			// Handal Cargo logo.
 			JLabel logo = new JLabel("Handal Cargo");
 			logo.setFont(logoFont);
+			logo.setForeground(Color.WHITE);
 			logo.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
 			add(logo, BorderLayout.WEST);
 			
@@ -106,13 +107,13 @@ public class Home extends JFrame {
 				ImageIcon icon = new ImageIcon(this.getClass().getResource("/user.png"));
 				Image scaledImage = icon.getImage().getScaledInstance(profileIconSize, profileIconSize, Image.SCALE_SMOOTH);
 				setIcon(new ImageIcon(scaledImage));
+				setIconTextGap(10);
 				
 				// Background color.
 				setUI((ButtonUI) BasicButtonUI.createUI(this));
 				setBackground(profileHoverColor);
 				
 				// Styling.
-				setIconTextGap(10);
 				setCursor(handCursor);
 				setContentAreaFilled(false);
 				setBorderPainted(false);
@@ -142,8 +143,15 @@ public class Home extends JFrame {
 	
 	class SideBar extends JPanel {
 		
-		private final int width = 260;
-		private final int buttonHeight = 40;
+		private final int 
+			width = 260,
+			buttonHeight = 40,
+			buttonIconSize = 16,
+			subButtonIconSize = 12;
+		
+		private Insets
+			buttonPadding = new Insets(0, 20, 0, 0),
+			subButtonPadding = new Insets(0, 30, 0, 0);
 		
 		private ArrayList<CategoryButton> buttons;
 		
@@ -155,7 +163,7 @@ public class Home extends JFrame {
 			// Subcategory names
 			// note: these names must match their corresponding page class names for navigation to work.
 			String
-				shipping[] = {"Sea Freight", "Air Cargo,", "Factor Entries", "Payment"},
+				shipping[] = {"Sea Freight", "Air Cargo", "Factor Entries", "Payment"},
 				master[] = {"Customers", "Staff", "Accounts"},
 				references[] = {"I dont know"},
 				reports[] = {"Dashboard", "I also dont know"},
@@ -206,10 +214,20 @@ public class Home extends JFrame {
 				headerButton.setText(text);
 				headerButton.setFont(sideBarButtonFont);
 				headerButton.setForeground(Color.WHITE);
+				
+				// Button icon.
+				String iconPath = String.format("/%s.png", text.toLowerCase());
+				ImageIcon icon = new ImageIcon(this.getClass().getResource(iconPath));
+				Image scaledIcon = icon.getImage().getScaledInstance(buttonIconSize, buttonIconSize, Image.SCALE_SMOOTH);
+				headerButton.setIcon(new ImageIcon(scaledIcon));
+				headerButton.setIconTextGap(10);
 
 				// Button color.
 				headerButton.setUI((ButtonUI) BasicButtonUI.createUI(this));
 				headerButton.setBackground(sideBarButtonHoverColor);
+				
+				headerButton.setHorizontalAlignment(SwingConstants.LEFT);
+				headerButton.setMargin(buttonPadding);
 				
 				headerButton.setCursor(handCursor);
 				headerButton.setContentAreaFilled(false);
@@ -237,9 +255,18 @@ public class Home extends JFrame {
 					subButton.setFont(sideBarSubButtonFont);
 					subButton.setForeground(Color.WHITE);
 					
+					// SubButton icon.
+					ImageIcon subIcon = new ImageIcon(this.getClass().getResource("/check.png"));
+					Image scaledSubIcon = subIcon.getImage().getScaledInstance(subButtonIconSize, subButtonIconSize, Image.SCALE_SMOOTH);
+					subButton.setIcon(new ImageIcon(scaledSubIcon));
+					subButton.setIconTextGap(10);
+					
 					// SubButton color.
 					subButton.setUI((ButtonUI) BasicButtonUI.createUI(CategoryButton.this));
 					subButton.setBackground(sideBarSubButtonColor);
+					
+					subButton.setHorizontalAlignment(SwingConstants.LEFT);
+					subButton.setMargin(subButtonPadding);
 					
 					subButton.setCursor(handCursor);
 					subButton.setBorderPainted(false);
