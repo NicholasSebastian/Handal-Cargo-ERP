@@ -34,7 +34,7 @@ public class Account {
 	
 	// From database to account object.
 	public Account(String username) {
-		String query = String.format("SELECT * FROM accounts WHERE username='%s'", username);
+		String query = String.format("SELECT * FROM staff WHERE username='%s'", username);
 		ResultSet account = Database.query(query);
 		
 		try {

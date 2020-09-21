@@ -15,8 +15,10 @@ import UI.Pages.*;
 @SuppressWarnings("serial")
 public class Home extends JFrame {
 	
+	public static Account account;
+	
 	private final Dimension defaultWindowSize = new Dimension(1280, 720);
-	private final Dimension minimumWindowSize = new Dimension(880, 520);
+	private final Dimension minimumWindowSize = new Dimension(960, 540);
 	
 	private Color
 		headerColor = new Color(0, 119, 182),
@@ -32,7 +34,6 @@ public class Home extends JFrame {
 		sideBarButtonFont = new Font("Arial", Font.BOLD, 16),
 		sideBarSubButtonFont = new Font("Arial", Font.PLAIN, 14);
 	
-	public Account account;
 	public Content contentBody;
 	public Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
 
@@ -53,7 +54,7 @@ public class Home extends JFrame {
 			}
 		});
 		
-		this.account = account;
+		Home.account = account;
 		
 		Header header = new Header();
 		SideBar sideBar = new SideBar();
@@ -75,7 +76,7 @@ public class Home extends JFrame {
 	
 	class Header extends JPanel {
 		
-		private final int height = 60;
+		private final int height = 50;
 		private final int profileIconSize = 30;
 		
 		public Header() {
@@ -165,8 +166,8 @@ public class Home extends JFrame {
 			String
 				shipping[] = {"Sea Freight", "Air Cargo", "Factor Entries", "Payment"},
 				master[] = {"Customers", "Staff", "Accounts"},
-				references[] = {"I dont know"},
-				reports[] = {"Dashboard", "I also dont know"},
+				references[] = {"Something"},
+				reports[] = {"Dashboard", "Payroll"},
 				settings[] = {"Staff Groups", "Company Setup", "System Access", "System User", "Backup And Restore"};
 			
 			LinkedHashMap<String, String[]> map = new LinkedHashMap<>();

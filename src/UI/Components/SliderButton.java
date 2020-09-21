@@ -1,5 +1,7 @@
 package UI.Components;
 
-public class SliderButton {
+import javax.swing.JToggleButton;
+
+public class SliderButton extends JToggleButton {
 
 }
