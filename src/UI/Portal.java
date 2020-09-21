@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import Static.Database;
-import Static.State;
 import Types.Account;
 
 @SuppressWarnings("serial")
@@ -102,8 +101,7 @@ public class Portal extends JFrame {
 					try {
 						results.next();
 						if (results.getInt(1) == 1) {
-							State.account = new Account(username);
-							new Home();
+							new Home(new Account(username));
 							dispose();
 						}
 						else {
