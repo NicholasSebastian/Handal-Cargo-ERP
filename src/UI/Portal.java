@@ -2,33 +2,58 @@ package UI;
 
 import java.awt.event.*;
 import javax.swing.*;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import Schemas.Account;
-import Schemas.Database;
+import Static.Database;
+import Static.State;
+import Types.Account;
 
 @SuppressWarnings("serial")
 public class Portal extends JFrame {
 	
-	public Portal() {
+	public static void main(String[] args) {
+		// Initialize connection to database.
+		Exception ok = Database.initialize();
+		
+		// Set the design of UI components.
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		// Launch the portal.
+		new Portal(ok);
+	}
+	
+	public Portal(Exception ok) {
 		super("Handal Cargo - Login");
-		setSize(400, 180);
 		setResizable(false);
 		
-		// Add the login component.
-		add(new Login());
-		
 		// Close database connection and free memory on close.
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				dispose();
-				Database.closeConnection();
-				System.exit(0);
-			}
-		});
+				setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+				addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {
+						dispose();
+						Database.closeConnection();
+						System.exit(0);
+					}
+				});
+		
+		if (ok == null) {
+			// If database ok, show login screen.
+			setSize(380, 180);
+			add(new Login());
+		}
+		else {
+			// If not ok, show error log.
+			setSize(460, 200);
+			add(new InitializeError(ok));
+		}
 		
 		// Display the application.
 		setVisible(true);
@@ -77,7 +102,9 @@ public class Portal extends JFrame {
 					try {
 						results.next();
 						if (results.getInt(1) == 1) {
-							new Home(new Account(username));
+							State.account = new Account(username);
+							new Home();
+							dispose();
 						}
 						else {
 							JOptionPane.showMessageDialog(
@@ -93,6 +120,25 @@ public class Portal extends JFrame {
 				}
 			});
 			add(loginButton);
+		}
+	}
+	
+	class InitializeError extends JPanel {
+		public InitializeError(Exception e) {
+			setLayout(null);
+			
+			// Display error name.
+			JLabel errorLabel = new JLabel("ERROR connecting to the database...");
+			errorLabel.setBounds(30, 20, 400, 20);
+			add(errorLabel);
+			
+			// Display stack trace.
+			JTextArea errorArea = new JTextArea(e.toString());
+			errorArea.setBounds(30, 50, 400, 100);
+			errorArea.setLineWrap(true);
+			errorArea.setWrapStyleWord(true);
+			errorArea.setEditable(false);
+			add(errorArea);
 		}
 	}
 }

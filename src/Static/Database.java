@@ -1,8 +1,7 @@
-package Schemas;
+package Static;
 
 import java.sql.*;
 import java.util.function.Consumer;
-import UI.Portal;
 
 public class Database {
 	
@@ -14,8 +13,8 @@ public class Database {
 	    databaseName = "handalcargo",
 	    user = "handalcargo",
 	    password = "hunter1389";
-
-	public static void main(String[] args) {
+	
+	public static Exception initialize() {
 		try {
 			// Register the MySQL Connector/J.
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
@@ -23,13 +22,12 @@ public class Database {
 			// Initialize connection with database.
 			String url = "jdbc:mysql://" + hostname + ":" + port + "/" + databaseName + "?serverTimezone=UTC";
 	        connection = DriverManager.getConnection(url, user, password);
-			
-			// Run the application.
-			new Portal();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			return e;
 		}
+		return null;
 	}
 	
 	// Reading from the database with a static statement.
