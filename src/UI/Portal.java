@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import Static.Database;
-import Types.Account;
+import Static.Encryption;
 
 @SuppressWarnings("serial")
 public class Portal extends JFrame {
@@ -77,6 +77,9 @@ public class Portal extends JFrame {
 			passwordField.setBounds(130, 50, 200, 20);
 			add(passwordLabel);
 			add(passwordField);
+			
+			// Initialize encryption.
+			Encryption.initialize();
 
 			// Login Button and functionality.
 			JButton loginButton = new JButton("Login");
@@ -101,7 +104,7 @@ public class Portal extends JFrame {
 					try {
 						results.next();
 						if (results.getInt(1) == 1) {
-							new Home(new Account(username));
+							new Home(username);
 							dispose();
 						}
 						else {

@@ -1,0 +1,23 @@
+package Static;
+
+import java.awt.Color;
+
+public class Palette {
+
+	public static final Color
+		blue = new Color(0, 104, 192),
+		blueHover = new Color(0, 94, 168),
+		green = new Color(0, 146, 84),
+		greenHover = new Color(0, 131, 78),
+		yellow = new Color(252, 157, 0),
+		yellowHover = new Color(228, 142, 0),
+		red = new Color(236, 90, 47),
+		redHover = new Color(211, 80, 40),
+		
+		headerColor = new Color(0, 119, 182),
+		profileHoverColor = new Color(35, 110, 165),
+		sideBarColor = new Color(27, 38, 42),
+		sideBarButtonHoverColor = new Color(42, 51, 57),
+		sideBarSubButtonColor = new Color(42, 60, 71),
+		sideBarSubButtonHoverColor = new Color(52, 70, 81);
+}

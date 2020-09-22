@@ -1,14 +1,10 @@
 package UI.Pages;
 
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.JPanel;
 
-@SuppressWarnings("serial")
 public class Dashboard extends JPanel {
 	
 	public Dashboard() {
-		setBackground(Color.WHITE);
 		
-		add(new JLabel("Dashboard"));
 	}
 }

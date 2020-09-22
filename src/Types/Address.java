@@ -17,4 +17,14 @@ public class Address {
 		this(address, kelurahan, city);
 		this.postalCode = postalCode;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format(
+			"%s%n%s, %s",
+			this.address,
+			this.kelurahan,
+			this.city
+		);
+	}
 }

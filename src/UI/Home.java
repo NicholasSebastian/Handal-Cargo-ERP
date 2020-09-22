@@ -9,35 +9,27 @@ import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import Static.Database;
-import Types.Account;
+import Static.Palette;
+import Types.Staff;
 import UI.Pages.*;
 
 @SuppressWarnings("serial")
 public class Home extends JFrame {
 	
-	public static Account account;
-	
 	private final Dimension defaultWindowSize = new Dimension(1280, 720);
 	private final Dimension minimumWindowSize = new Dimension(960, 540);
-	
-	private Color
-		headerColor = new Color(0, 119, 182),
-		profileHoverColor = new Color(35, 110, 165),
-		sideBarColor = new Color(27, 38, 42),
-		sideBarButtonHoverColor = new Color(42, 51, 57),
-		sideBarSubButtonColor = new Color(42, 60, 71),
-		sideBarSubButtonHoverColor = new Color(52, 70, 81);
 
 	private final Font
-		logoFont = new Font("Arial", Font.BOLD, 25),
+		logoFont = new Font("Arial Black", Font.BOLD, 22),
 		profileFont = new Font("Arial", Font.BOLD, 16),
 		sideBarButtonFont = new Font("Arial", Font.BOLD, 16),
 		sideBarSubButtonFont = new Font("Arial", Font.PLAIN, 14);
 	
-	public Content contentBody;
-	public Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
+	public static Staff account;
+	public static Content contentBody;
+	public static Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
 
-	public Home(Account account) {
+	public Home(String username) {
 		setTitle("Handal Cargo - Enterprise System");
 		setSize(defaultWindowSize);
 		setMinimumSize(minimumWindowSize);
@@ -54,7 +46,7 @@ public class Home extends JFrame {
 			}
 		});
 		
-		Home.account = account;
+		Home.account = new Staff(username);
 		
 		Header header = new Header();
 		SideBar sideBar = new SideBar();
@@ -77,11 +69,11 @@ public class Home extends JFrame {
 	class Header extends JPanel {
 		
 		private final int height = 50;
-		private final int profileIconSize = 30;
+		private final int profileIconSize = 25;
 		
 		public Header() {
 			setPreferredSize(new Dimension(0, height));
-			setBackground(headerColor);
+			setBackground(Palette.headerColor);
 			setLayout(new BorderLayout());
 			
 			// Handal Cargo logo.
@@ -108,11 +100,11 @@ public class Home extends JFrame {
 				ImageIcon icon = new ImageIcon(this.getClass().getResource("/user.png"));
 				Image scaledImage = icon.getImage().getScaledInstance(profileIconSize, profileIconSize, Image.SCALE_SMOOTH);
 				setIcon(new ImageIcon(scaledImage));
-				setIconTextGap(10);
+				setIconTextGap(8);
 				
 				// Background color.
 				setUI((ButtonUI) BasicButtonUI.createUI(this));
-				setBackground(profileHoverColor);
+				setBackground(Palette.profileHoverColor);
 				
 				// Styling.
 				setCursor(handCursor);
@@ -157,7 +149,7 @@ public class Home extends JFrame {
 		private ArrayList<CategoryButton> buttons;
 		
 		public SideBar() {
-			setBackground(sideBarColor);
+			setBackground(Palette.sideBarColor);
 			setPreferredSize(new Dimension(width, 0));
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
@@ -231,7 +223,7 @@ public class Home extends JFrame {
 
 				// Button color.
 				headerButton.setUI((ButtonUI) BasicButtonUI.createUI(this));
-				headerButton.setBackground(sideBarButtonHoverColor);
+				headerButton.setBackground(Palette.sideBarButtonHoverColor);
 				
 				headerButton.setHorizontalAlignment(SwingConstants.LEFT);
 				headerButton.setMargin(buttonPadding);
@@ -271,7 +263,7 @@ public class Home extends JFrame {
 						
 						// SubButton color.
 						subButton.setUI((ButtonUI) BasicButtonUI.createUI(CategoryButton.this));
-						subButton.setBackground(sideBarSubButtonColor);
+						subButton.setBackground(Palette.sideBarSubButtonColor);
 						
 						subButton.setHorizontalAlignment(SwingConstants.LEFT);
 						subButton.setMargin(subButtonPadding);
@@ -283,11 +275,11 @@ public class Home extends JFrame {
 						// SubButton hover effects.
 						subButton.addMouseListener(new MouseAdapter() {
 							public void mouseEntered(MouseEvent e) {
-								subButton.setBackground(sideBarSubButtonHoverColor);
+								subButton.setBackground(Palette.sideBarSubButtonHoverColor);
 							}
 							
 							public void mouseExited(MouseEvent e) {
-								subButton.setBackground(sideBarSubButtonColor);
+								subButton.setBackground(Palette.sideBarSubButtonColor);
 							}
 						});
 						

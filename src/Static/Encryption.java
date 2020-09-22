@@ -12,7 +12,7 @@ public class Encryption {
 	
 	private static final String unicodeFormat = "UTF8";
 	private static final String encryptionScheme = "DESede";
-    private static final String encryptionKey = "IfatIsGayWithBryant";
+    private static final String encryptionKey = "TomYumSukiyakiSamgyeopsalBakmiFettuccine";
     
     private static Cipher cipher;
     private static SecretKey key;
