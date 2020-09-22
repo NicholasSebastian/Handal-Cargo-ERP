@@ -184,6 +184,7 @@ public class Home extends JFrame {
 				buttons.add(button);
 				add(button);
 			});
+			add(new CategoryButton("Log Out and Exit", null));
 		}
 		
 		class CategoryButton extends JPanel {
@@ -217,11 +218,16 @@ public class Home extends JFrame {
 				headerButton.setForeground(Color.WHITE);
 				
 				// Button icon.
-				String iconPath = String.format("/%s.png", text.toLowerCase());
-				ImageIcon icon = new ImageIcon(this.getClass().getResource(iconPath));
-				Image scaledIcon = icon.getImage().getScaledInstance(buttonIconSize, buttonIconSize, Image.SCALE_SMOOTH);
-				headerButton.setIcon(new ImageIcon(scaledIcon));
-				headerButton.setIconTextGap(10);
+				try {
+					String iconPath = String.format("/%s.png", text.toLowerCase().replaceAll("\\s+", ""));
+					ImageIcon icon = new ImageIcon(this.getClass().getResource(iconPath));
+					Image scaledIcon = icon.getImage().getScaledInstance(buttonIconSize, buttonIconSize, Image.SCALE_SMOOTH);
+					headerButton.setIcon(new ImageIcon(scaledIcon));
+					headerButton.setIconTextGap(10);
+				}
+				catch(Exception e) {
+					System.out.println(text + " icon not found.");
+				}
 
 				// Button color.
 				headerButton.setUI((ButtonUI) BasicButtonUI.createUI(this));
@@ -247,77 +253,98 @@ public class Home extends JFrame {
 				});
 				
 				// Initialize subcategory buttons.
-				subButtons = new JButton[subcategories.length];
-				int i = 0;
-				for (String subcategory : subcategories) {
-					JButton subButton = new JButton();
-					
-					subButton.setText(subcategory);
-					subButton.setFont(sideBarSubButtonFont);
-					subButton.setForeground(Color.WHITE);
-					
-					// SubButton icon.
-					ImageIcon subIcon = new ImageIcon(this.getClass().getResource("/check.png"));
-					Image scaledSubIcon = subIcon.getImage().getScaledInstance(subButtonIconSize, subButtonIconSize, Image.SCALE_SMOOTH);
-					subButton.setIcon(new ImageIcon(scaledSubIcon));
-					subButton.setIconTextGap(10);
-					
-					// SubButton color.
-					subButton.setUI((ButtonUI) BasicButtonUI.createUI(CategoryButton.this));
-					subButton.setBackground(sideBarSubButtonColor);
-					
-					subButton.setHorizontalAlignment(SwingConstants.LEFT);
-					subButton.setMargin(subButtonPadding);
-					
-					subButton.setCursor(handCursor);
-					subButton.setBorderPainted(false);
-					subButton.setFocusPainted(false);
-					
-					// SubButton hover effects.
-					subButton.addMouseListener(new MouseAdapter() {
-						public void mouseEntered(MouseEvent e) {
-							subButton.setBackground(sideBarSubButtonHoverColor);
-						}
+				if (subcategories != null) {
+					subButtons = new JButton[subcategories.length];
+					int i = 0;
+					for (String subcategory : subcategories) {
+						JButton subButton = new JButton();
 						
-						public void mouseExited(MouseEvent e) {
-							subButton.setBackground(sideBarSubButtonColor);
-						}
-					});
-					
-					// SubButton functionality.
-					subButton.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							// The class name of every page is the same but with no spaces.
-							String pageClassName = subcategory.replaceAll("\\s+", "");
-							contentBody.displayPage(pageClassName);
-						}
-					});
-					
-					subButtons[i] = subButton;
-					i++;
-				}
-				
-				// HeaderButton functionality.
-				headerButton.addItemListener(new ItemListener() {
-					@Override
-					public void itemStateChanged(ItemEvent e) {
-						if (headerButton.isSelected()) {
-							buttons.forEach(button -> {
-								if (button != CategoryButton.this) {
-									button.deselect();
-								}
-							});
-							expand();
-						}
-						else {
-							shrink();
-						}
-						// Re-render the component.
-						CategoryButton.this.revalidate();
-						CategoryButton.this.repaint();
+						subButton.setText(subcategory);
+						subButton.setFont(sideBarSubButtonFont);
+						subButton.setForeground(Color.WHITE);
+						
+						// SubButton icon.
+						ImageIcon subIcon = new ImageIcon(this.getClass().getResource("/check.png"));
+						Image scaledSubIcon = subIcon.getImage().getScaledInstance(subButtonIconSize, subButtonIconSize, Image.SCALE_SMOOTH);
+						subButton.setIcon(new ImageIcon(scaledSubIcon));
+						subButton.setIconTextGap(10);
+						
+						// SubButton color.
+						subButton.setUI((ButtonUI) BasicButtonUI.createUI(CategoryButton.this));
+						subButton.setBackground(sideBarSubButtonColor);
+						
+						subButton.setHorizontalAlignment(SwingConstants.LEFT);
+						subButton.setMargin(subButtonPadding);
+						
+						subButton.setCursor(handCursor);
+						subButton.setBorderPainted(false);
+						subButton.setFocusPainted(false);
+						
+						// SubButton hover effects.
+						subButton.addMouseListener(new MouseAdapter() {
+							public void mouseEntered(MouseEvent e) {
+								subButton.setBackground(sideBarSubButtonHoverColor);
+							}
+							
+							public void mouseExited(MouseEvent e) {
+								subButton.setBackground(sideBarSubButtonColor);
+							}
+						});
+						
+						// SubButton functionality.
+						subButton.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								// The class name of every page is the same but with no spaces.
+								String pageClassName = subcategory.replaceAll("\\s+", "");
+								contentBody.displayPage(pageClassName);
+							}
+						});
+						
+						subButtons[i] = subButton;
+						i++;
 					}
-				});
+					
+					// HeaderButton functionality.
+					headerButton.addItemListener(new ItemListener() {
+						@Override
+						public void itemStateChanged(ItemEvent e) {
+							if (headerButton.isSelected()) {
+								buttons.forEach(button -> {
+									if (button != CategoryButton.this) {
+										button.deselect();
+									}
+								});
+								expand();
+							}
+							else {
+								shrink();
+							}
+							// Re-render the component.
+							CategoryButton.this.revalidate();
+							CategoryButton.this.repaint();
+						}
+					});
+				}
+				else {
+					// Regular button click functionality.
+					headerButton.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							int exit = JOptionPane.showConfirmDialog(
+								Home.this, 
+								"Are you sure?", 
+								"Log Out and Exit", 
+								JOptionPane.YES_NO_OPTION
+							);
+							if (exit == JOptionPane.YES_OPTION) {
+								Home.this.dispose();
+								Database.closeConnection();
+								System.exit(0);
+							}
+						}
+					});
+				}
 				
 				add(headerButton);
 			}
