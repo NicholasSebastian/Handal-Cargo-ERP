@@ -1,9 +1,8 @@
 package Dynamic;
 
-import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import Static.Database;
 
@@ -11,15 +10,14 @@ public class Groups {
 	
 	// Integer : roleId
 	// SimpleEntry<String, boolean[]> : roleName and accessRights
-	public static HashMap<Integer, AbstractMap.SimpleEntry<String, boolean[]>> groups = new HashMap<>();
+	public static HashMap<Integer, SimpleEntry<String, boolean[]>> groups = new HashMap<>();
 	
 	// Load/reload settings from database.
 	public static void initialize() {
-		
-		// Query from database.
-		ResultSet results = Database.query("SELECT * FROM groups");
-		
 		try {	
+			// Query from database.
+			ResultSet results = Database.query("SELECT * FROM staffgroups");
+			
 			int boolCount = results.getMetaData().getColumnCount() - 2;
 			
 			while (results.next()) {
@@ -31,11 +29,16 @@ public class Groups {
 					accessRights[i] = results.getBoolean(i + 3);
 				}
 				
-				groups.put(roleId, new AbstractMap.SimpleEntry<String, boolean[]>(roleName, accessRights));
+				groups.put(roleId, new SimpleEntry<String, boolean[]>(roleName, accessRights));
 			}
 		} 
-		catch (SQLException e) {
-			Database.printErrors(e);
+		catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
+	
+	// Get the role name from the id.
+	public static String getRoleName(int roleId) {
+		return groups.get(roleId).getKey();
 	}
 }

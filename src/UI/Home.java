@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import Dynamic.Groups;
 import Static.Database;
 import Static.Palette;
 import Types.Staff;
@@ -46,6 +47,8 @@ public class Home extends JFrame {
 			}
 		});
 		
+		// Initialize global variables.
+		Groups.initialize();
 		Home.account = new Staff(username);
 		
 		Header header = new Header();
