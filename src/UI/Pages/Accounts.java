@@ -15,7 +15,8 @@ public class Accounts extends QueryLayout {
 		titleLabel.setText("Accounts");
 	}
 	
-	protected void setDatabaseView() {
+	@Override
+	protected void setDatabaseView(JScrollPane scrollPane) {
 		final String[] columns = {"Username", "Encrypted Password", "Full Name", "Group"};
 		ArrayList<String[]> data = new ArrayList<>();
 		
@@ -52,13 +53,21 @@ public class Accounts extends QueryLayout {
 		
 	}
 	
-	protected void setAddPage() {
+	@Override
+	protected void setAddPage(JPanel addView) {
 		addView.setOpaque(false);
 		
 	}
 	
-	protected void setModifyPage() {
+	@Override
+	protected void setModifyPage(JPanel modifyView) {
 		modifyView.setOpaque(false);
+		
+	}
+
+	@Override
+	protected void setDeletePage(JPanel deleteView) {
+		deleteView.setOpaque(false);
 		
 	}
 }

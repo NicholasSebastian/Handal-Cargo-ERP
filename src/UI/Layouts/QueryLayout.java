@@ -18,16 +18,15 @@ public abstract class QueryLayout extends JPanel {
 	
 	private CardLayout content;
 	private JPanel contentPanel;
+	private JScrollPane scrollPane;
 	
-	protected JLabel titleLabel = new JLabel();		// Set page title.
-	protected JScrollPane scrollPane;				// Set overview page scrollpane content.
-	protected JPanel addView = new JPanel();		// Set add page.
-	protected JPanel modifyView = new JPanel();		// Set modify page.
+	protected JLabel titleLabel = new JLabel();	// For setting the page title.
 	
-	protected abstract void setDatabaseView();	
+	protected abstract void setDatabaseView(JScrollPane scrollPane);	
 	protected abstract void searchFunction(String query);
-	protected abstract void setAddPage();
-	protected abstract void setModifyPage();
+	protected abstract void setAddPage(JPanel addView);
+	protected abstract void setModifyPage(JPanel modifyView);
+	protected abstract void setDeletePage(JPanel deleteView);
 
 	public QueryLayout() {
 		setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -53,15 +52,21 @@ public abstract class QueryLayout extends JPanel {
 		add(contentPanel, BorderLayout.CENTER);
 		
 		// Initialize all content.
-		setDatabaseView();
-		setAddPage();
-		setModifyPage();
+		scrollPane =  new JScrollPane();
+		JPanel addView = new JPanel();
+		JPanel modifyView = new JPanel();
+		JPanel deleteView = new JPanel();
+		
+		setDatabaseView(scrollPane);
+		setAddPage(addView);
+		setModifyPage(modifyView);
+		setDeletePage(deleteView);
 		
 		// Load the content into the content panel.
 		contentPanel.add(new Overview(), "Overview");	// Default view.
 		contentPanel.add(addView, "Add");
 		contentPanel.add(modifyView, "Modify");
-		contentPanel.add(new DeleteView(), "Delete");
+		contentPanel.add(deleteView, "Delete");
 	}
 	
 	public void displayPage(String viewName) {
@@ -97,12 +102,11 @@ public abstract class QueryLayout extends JPanel {
 			innerPanel.setLayout(new BorderLayout(0, 0));
 			innerPanel.setOpaque(false);
 			
-			scrollPane = new JScrollPane();
 			scrollPane.getViewport().setBackground(Color.WHITE);
 			innerPanel.add(scrollPane, BorderLayout.CENTER);
 			
 			JPanel rightPanel = new JPanel();
-			rightPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+			rightPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 			rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 			rightPanel.setOpaque(false);
 			
@@ -133,13 +137,6 @@ public abstract class QueryLayout extends JPanel {
 			innerPanel.add(rightPanel, BorderLayout.EAST);
 			add(topPanel, BorderLayout.NORTH);
 			add(innerPanel, BorderLayout.CENTER);
-		}
-	}
-	
-	class DeleteView extends JPanel {
-		public DeleteView() {
-			setOpaque(false);
-			
 		}
 	}
 }
