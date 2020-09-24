@@ -16,8 +16,12 @@ public class Palette {
 		
 		headerColor = new Color(0, 119, 182),
 		profileHoverColor = new Color(35, 110, 165),
+		
 		sideBarColor = new Color(27, 38, 42),
 		sideBarButtonHoverColor = new Color(42, 51, 57),
 		sideBarSubButtonColor = new Color(42, 60, 71),
-		sideBarSubButtonHoverColor = new Color(52, 70, 81);
+		sideBarSubButtonHoverColor = new Color(52, 70, 81),
+	
+		tableAlternateColor = new Color(240, 240, 240),
+		tableSelectColor = new Color(15, 133, 254);
 }

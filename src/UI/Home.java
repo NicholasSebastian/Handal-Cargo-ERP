@@ -17,10 +17,10 @@ import UI.Pages.*;
 @SuppressWarnings("serial")
 public class Home extends JFrame {
 	
-	private final Dimension defaultWindowSize = new Dimension(1280, 720);
-	private final Dimension minimumWindowSize = new Dimension(960, 540);
+	private static final Dimension defaultWindowSize = new Dimension(1280, 720);
+	private static final Dimension minimumWindowSize = new Dimension(960, 540);
 
-	private final Font
+	private static final Font
 		logoFont = new Font("Arial Black", Font.BOLD, 22),
 		profileFont = new Font("Arial", Font.BOLD, 16),
 		sideBarButtonFont = new Font("Arial", Font.BOLD, 16),
@@ -41,9 +41,7 @@ public class Home extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				dispose();
-				Database.closeConnection();
-				System.exit(0);
+				promptExit();
 			}
 		});
 		
@@ -67,6 +65,20 @@ public class Home extends JFrame {
 		
 		// Display the application.
 		setVisible(true);
+	}
+	
+	private void promptExit() {
+		int exit = JOptionPane.showConfirmDialog(
+			this, 
+			"Log Out and Exit?", 
+			"Close Application", 
+			JOptionPane.YES_NO_OPTION
+		);
+		if (exit == JOptionPane.YES_OPTION) {
+			dispose();
+			Database.closeConnection();
+			System.exit(0);
+		}
 	}
 	
 	class Header extends JPanel {
@@ -325,18 +337,8 @@ public class Home extends JFrame {
 					// Regular button click functionality.
 					headerButton.addActionListener(new ActionListener() {
 						@Override
-						public void actionPerformed(ActionEvent arg0) {
-							int exit = JOptionPane.showConfirmDialog(
-								Home.this, 
-								"Are you sure?", 
-								"Log Out and Exit", 
-								JOptionPane.YES_NO_OPTION
-							);
-							if (exit == JOptionPane.YES_OPTION) {
-								Home.this.dispose();
-								Database.closeConnection();
-								System.exit(0);
-							}
+						public void actionPerformed(ActionEvent e) {
+							promptExit();
 						}
 					});
 				}
@@ -391,7 +393,9 @@ public class Home extends JFrame {
 			JPanel pages[] = {
 				new Dashboard(),	// First item is loaded first, hence will be the default page.
 				new UserProfile(),
-				new Accounts(),
+				new SeaFreight(),
+				new AirCargo(),
+				new Accounts()
 			};
 			
 			// Load them all into the card layout.

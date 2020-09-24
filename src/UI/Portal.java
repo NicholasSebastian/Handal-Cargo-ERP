@@ -13,9 +13,6 @@ import Static.Encryption;
 public class Portal extends JFrame {
 	
 	public static void main(String[] args) {
-		// Initialize connection to database.
-		Exception ok = Database.initialize();
-		
 		// Set the design of UI components.
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -23,6 +20,9 @@ public class Portal extends JFrame {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+		// Initialize connection to database.
+		Exception ok = Database.initialize();
 		
 		// Launch the portal.
 		new Portal(ok);

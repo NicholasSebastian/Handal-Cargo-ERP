@@ -1,12 +1,15 @@
 package UI.Pages;
 
 import java.util.ArrayList;
+import java.awt.BorderLayout;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 
 import Dynamic.Groups;
 import Static.Database;
 import UI.Layouts.QueryLayout;
+import UI.Components.TitleAndClose;
 
 @SuppressWarnings("serial")
 public class Accounts extends QueryLayout {
@@ -16,7 +19,7 @@ public class Accounts extends QueryLayout {
 	}
 	
 	@Override
-	protected void setDatabaseView(JScrollPane scrollPane) {
+	protected void setDatabaseView(JTable table) {
 		final String[] columns = {"Username", "Encrypted Password", "Full Name", "Group"};
 		ArrayList<String[]> data = new ArrayList<>();
 		
@@ -44,30 +47,45 @@ public class Accounts extends QueryLayout {
 		}
 		
 		// Create table and set view.
-		JTable table = new JTable(dataArray, columns);
-		scrollPane.setViewportView(table);
+		DefaultTableModel model = new DefaultTableModel(dataArray, columns);
+		table.setModel(model);
 	}
 	
 	@Override
 	protected void searchFunction(String query) {
-		
+		System.out.println(query);
 	}
 	
 	@Override
 	protected void setAddPage(JPanel addView) {
 		addView.setOpaque(false);
+		addView.setLayout(new BorderLayout());
 		
+		addView.add(
+			new TitleAndClose(
+				"Create a new Account", 
+				e -> displayPage("Overview")), 
+			BorderLayout.NORTH);
+		
+		// here.
 	}
 	
 	@Override
 	protected void setModifyPage(JPanel modifyView) {
 		modifyView.setOpaque(false);
+		modifyView.setLayout(new BorderLayout());
 		
+		modifyView.add(
+			new TitleAndClose(
+				"Modify Account", 
+				e -> displayPage("Overview")), 
+			BorderLayout.NORTH);
+		
+		// here.
 	}
 
 	@Override
-	protected void setDeletePage(JPanel deleteView) {
-		deleteView.setOpaque(false);
+	protected void deleteFunction() {
 		
 	}
 }

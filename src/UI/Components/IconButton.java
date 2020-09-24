@@ -15,15 +15,15 @@ import Static.Palette;
 import UI.Home;
 
 @SuppressWarnings("serial")
-public class SearchButton extends JButton {
+public class IconButton extends JButton {
 	
 	private static final Dimension size = new Dimension(30, 30);
 	private static final int iconSize = 15;
 	
-	public SearchButton(Consumer<ActionEvent> function) {
+	public IconButton(String iconPath, Consumer<ActionEvent> function) {
 		
 		// Set icon
-		ImageIcon icon = new ImageIcon(this.getClass().getResource("/search.png"));
+		ImageIcon icon = new ImageIcon(this.getClass().getResource(iconPath));
 		Image scaledIcon = icon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
 		setIcon(new ImageIcon(scaledIcon));
 		
@@ -43,11 +43,11 @@ public class SearchButton extends JButton {
 		// Hover effects
 		addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent e) {
-				SearchButton.this.setBackground(Palette.blueHover);
+				IconButton.this.setBackground(Palette.blueHover);
 			}
 			
 			public void mouseExited(MouseEvent e) {
-				SearchButton.this.setBackground(Palette.blue);
+				IconButton.this.setBackground(Palette.blue);
 			}
 		});
 		
