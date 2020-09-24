@@ -9,6 +9,7 @@ import javax.swing.table.TableCellRenderer;
 import Static.Palette;
 import UI.Components.ColoredButton;
 import UI.Components.IconButton;
+import UI.Components.TitleAndClose;
 
 @SuppressWarnings("serial")
 public abstract class QueryLayout extends JPanel {
@@ -26,6 +27,8 @@ public abstract class QueryLayout extends JPanel {
 	
 	// Override to set the page title.
 	protected JLabel titleLabel = new JLabel();
+	protected JLabel addTitleLabel = new JLabel();
+	protected JLabel modifyTitleLabel = new JLabel();
 	
 	// Override to set content.
 	protected abstract void setDatabaseView(JTable table);	
@@ -43,9 +46,11 @@ public abstract class QueryLayout extends JPanel {
 		titlePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		add(titlePanel, BorderLayout.NORTH);
 		
+		// Title
 		titleLabel.setFont(titleFont);
 		titlePanel.add(titleLabel);
 		
+		// White panel
 		contentPanel = new JPanel();
 		contentPanel.setBorder(
 			new CompoundBorder(
@@ -57,14 +62,37 @@ public abstract class QueryLayout extends JPanel {
 		contentPanel.setLayout(content);
 		add(contentPanel, BorderLayout.CENTER);
 		
-		// Initialize all content.
-		table =  new CustomTable();
+		// 'Add page' and 'Modify page'
 		JPanel addView = new JPanel();
 		JPanel modifyView = new JPanel();
 		
+		addView.setOpaque(false);
+		addView.setLayout(new BorderLayout());
+		modifyView.setOpaque(false);
+		modifyView.setLayout(new BorderLayout());
+		
+		// 'Add page' and 'Modify page' titles
+		addView.add(new TitleAndClose(addTitleLabel, 
+			e -> displayPage("Overview")), BorderLayout.NORTH);
+		modifyView.add(new TitleAndClose(modifyTitleLabel, 
+			e -> displayPage("Overview")), BorderLayout.NORTH);
+		
+		// Initialize all content.
+		table =  new CustomTable();
+		JPanel addContent = new JPanel();
+		JPanel modifyContent = new JPanel();
+		
+		addContent.setOpaque(false);
+		addContent.setLayout(null);
+		modifyContent.setOpaque(false);
+		modifyContent.setLayout(null);
+		
+		addView.add(addContent, BorderLayout.CENTER);
+		modifyView.add(modifyContent, BorderLayout.CENTER);
+		
 		setDatabaseView(table);
-		setAddPage(addView);
-		setModifyPage(modifyView);
+		setAddPage(addContent);
+		setModifyPage(modifyContent);
 		
 		// Load the content into the content panel.
 		contentPanel.add(new Overview(), "Overview");	// Default view.

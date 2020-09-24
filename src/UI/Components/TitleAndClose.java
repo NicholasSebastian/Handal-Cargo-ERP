@@ -14,11 +14,10 @@ public class TitleAndClose extends JPanel {
 	private final Font 
 		titleFont = new Font("Arial", Font.BOLD, 18);
 	
-	public TitleAndClose(String title, Consumer<ActionEvent> function) {
+	public TitleAndClose(JLabel titleLabel, Consumer<ActionEvent> function) {
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		
-		JLabel titleLabel = new JLabel(title);
 		titleLabel.setFont(titleFont);
 		add(titleLabel, BorderLayout.WEST);
 		

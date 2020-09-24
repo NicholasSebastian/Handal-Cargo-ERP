@@ -1,7 +1,6 @@
 package UI.Pages;
 
 import java.util.ArrayList;
-import java.awt.BorderLayout;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
@@ -9,13 +8,14 @@ import java.sql.ResultSet;
 import Dynamic.Groups;
 import Static.Database;
 import UI.Layouts.QueryLayout;
-import UI.Components.TitleAndClose;
 
 @SuppressWarnings("serial")
 public class Accounts extends QueryLayout {
 	
 	public Accounts() {
 		titleLabel.setText("Accounts");
+		addTitleLabel.setText("Create an Account");
+		modifyTitleLabel.setText("Modify Account");
 	}
 	
 	@Override
@@ -58,30 +58,26 @@ public class Accounts extends QueryLayout {
 	
 	@Override
 	protected void setAddPage(JPanel addView) {
-		addView.setOpaque(false);
-		addView.setLayout(new BorderLayout());
 		
-		addView.add(
-			new TitleAndClose(
-				"Create a new Account", 
-				e -> displayPage("Overview")), 
-			BorderLayout.NORTH);
+		// Enter username and password.
+		// Then can either choose to pick an existing staff in the database or
+		// Enter details to create a new staff sekalian, then use that staff.
 		
-		// here.
+//			JLabel label = new JLabel();
+//			JTextField textField = new JTextField();
+//			
+//			label.setLocation(100, 100);
+//			label.setSize(100, 20);
+//			textField.setLocation(200, 100);
+//			textField.setSize(200, 20);
+//			
+//			content.add(label);
+//			content.add(textField);
 	}
 	
 	@Override
 	protected void setModifyPage(JPanel modifyView) {
-		modifyView.setOpaque(false);
-		modifyView.setLayout(new BorderLayout());
 		
-		modifyView.add(
-			new TitleAndClose(
-				"Modify Account", 
-				e -> displayPage("Overview")), 
-			BorderLayout.NORTH);
-		
-		// here.
 	}
 
 	@Override
