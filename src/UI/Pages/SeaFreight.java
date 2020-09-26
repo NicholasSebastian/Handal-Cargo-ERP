@@ -2,7 +2,7 @@ package UI.Pages;
 
 import javax.swing.*;
 
-import UI.Layouts.QueryLayout;
+import UI.Components.QueryLayout;
 
 @SuppressWarnings("serial")
 public class SeaFreight extends QueryLayout {
@@ -20,21 +20,21 @@ public class SeaFreight extends QueryLayout {
 
 	@Override
 	protected void searchFunction(String query) {
+		System.out.println(query);
+	}
+
+	@Override
+	protected void setAddPage(JPanel addContent) {
 		
 	}
 
 	@Override
-	protected void setAddPage(JPanel addView) {
+	protected void setModifyPage(JPanel modifyContent) {
 		
 	}
 
 	@Override
-	protected void setModifyPage(JPanel modifyView) {
-		
-	}
-
-	@Override
-	protected void deleteFunction() {
+	protected void deleteFunction(Object selectedRowValue) {
 		
 	}
 }

@@ -1,15 +1,21 @@
 package UI.Pages;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.awt.Component;
+import java.sql.ResultSet;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.sql.ResultSet;
 
 import Dynamic.Groups;
 import Static.Database;
-import UI.Layouts.QueryLayout;
+import UI.Components.QueryLayout;
+import UI.Components.SliderButton;
+import UI.Components.DatePicker;
+import UI.Components.FormLayout2;
+import UI.Components.NumberField;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "rawtypes", "unchecked" })
 public class Accounts extends QueryLayout {
 	
 	public Accounts() {
@@ -57,31 +63,50 @@ public class Accounts extends QueryLayout {
 	}
 	
 	@Override
-	protected void setAddPage(JPanel addView) {
+	protected void setAddPage(JPanel addContent) {
+		HashMap<String, Component> formContent = new HashMap<>();
+		formContent.put("Username", new JTextField());
+		formContent.put("Password", new JTextField());
 		
-		// Enter username and password.
-		// Then can either choose to pick an existing staff in the database or
-		// Enter details to create a new staff sekalian, then use that staff.
+		ArrayList<String> groups = new ArrayList<>();
+		Groups.groups.values().forEach(entry -> groups.add(entry.getKey()));
 		
-//			JLabel label = new JLabel();
-//			JTextField textField = new JTextField();
-//			
-//			label.setLocation(100, 100);
-//			label.setSize(100, 20);
-//			textField.setLocation(200, 100);
-//			textField.setSize(200, 20);
-//			
-//			content.add(label);
-//			content.add(textField);
+		HashMap<String, Component> innerFormContent = new HashMap<>();
+		innerFormContent.put("Name", new JTextField());
+		innerFormContent.put("Group", new JComboBox(groups.toArray()));
+		innerFormContent.put("Address", new JTextField());
+		innerFormContent.put("Kelurahan", new JTextField());
+		innerFormContent.put("City", new JTextField());
+		innerFormContent.put("Phone", new JTextField());
+		innerFormContent.put("Mobile", new JTextField());
+		innerFormContent.put("Sex", new JComboBox(new String[] {"Male", "Female"}));
+		innerFormContent.put("Religion", new JTextField());
+		innerFormContent.put("Birth Place", new JTextField());
+		innerFormContent.put("Birthday", new DatePicker());
+		innerFormContent.put("Lembur", new NumberField());
+		innerFormContent.put("Salary", new NumberField());
+		innerFormContent.put("Allowance", new NumberField());
+		innerFormContent.put("THR", new NumberField());
+		innerFormContent.put("Bonus", new NumberField());
+		innerFormContent.put("Active", new SliderButton());
+		innerFormContent.put("Employment Date", new DatePicker());
+		
+		JTable staffTable = new JTable();
+		
+		FormLayout2.addTo(addContent, formContent, innerFormContent, staffTable, e -> {
+			// TODO: Password Encryption
+			// TODO: Form Validation
+			
+		});
 	}
 	
 	@Override
-	protected void setModifyPage(JPanel modifyView) {
+	protected void setModifyPage(JPanel modifyContent) {
 		
 	}
 
 	@Override
-	protected void deleteFunction() {
+	protected void deleteFunction(Object selectedRowValue) {
 		
 	}
 }

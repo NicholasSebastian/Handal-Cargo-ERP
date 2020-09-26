@@ -12,6 +12,8 @@ import Static.Encryption;
 @SuppressWarnings("serial")
 public class Portal extends JFrame {
 	
+	// TODO: LOGIN SCREEN GUI (MAKE IT BETTER)
+	
 	public static void main(String[] args) {
 		// Set the design of UI components.
 		try {
@@ -89,6 +91,8 @@ public class Portal extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					String username = usernameField.getText();
 					String password = String.valueOf(passwordField.getPassword());
+					
+					// TODO: PASSWORD ENCRYPTION (ENCRYPT PASSWORD INPUT THEN QUERY)
 					
 					// Authentication.
 					String query = "SELECT EXISTS ( SELECT * FROM accounts WHERE username = ? AND password = ? )";

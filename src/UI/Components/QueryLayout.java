@@ -1,4 +1,4 @@
-package UI.Layouts;
+package UI.Components;
 
 import java.awt.*;
 import javax.swing.*;
@@ -7,9 +7,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 import Static.Palette;
-import UI.Components.ColoredButton;
-import UI.Components.IconButton;
-import UI.Components.TitleAndClose;
 
 @SuppressWarnings("serial")
 public abstract class QueryLayout extends JPanel {
@@ -33,9 +30,9 @@ public abstract class QueryLayout extends JPanel {
 	// Override to set content.
 	protected abstract void setDatabaseView(JTable table);	
 	protected abstract void searchFunction(String query);
-	protected abstract void setAddPage(JPanel addView);
-	protected abstract void setModifyPage(JPanel modifyView);
-	protected abstract void deleteFunction();
+	protected abstract void setAddPage(JPanel addContent);
+	protected abstract void setModifyPage(JPanel modifyContent);
+	protected abstract void deleteFunction(Object selectedRowValue);
 
 	public QueryLayout() {
 		setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -83,16 +80,18 @@ public abstract class QueryLayout extends JPanel {
 		JPanel modifyContent = new JPanel();
 		
 		addContent.setOpaque(false);
-		addContent.setLayout(null);
+		addContent.setLayout(new GridBagLayout());
+		addContent.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 		modifyContent.setOpaque(false);
-		modifyContent.setLayout(null);
-		
-		addView.add(addContent, BorderLayout.CENTER);
-		modifyView.add(modifyContent, BorderLayout.CENTER);
+		modifyContent.setLayout(new GridBagLayout());
+		modifyContent.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 		
 		setDatabaseView(table);
 		setAddPage(addContent);
 		setModifyPage(modifyContent);
+		
+		addView.add(addContent, BorderLayout.CENTER);
+		modifyView.add(modifyContent, BorderLayout.CENTER);
 		
 		// Load the content into the content panel.
 		contentPanel.add(new Overview(), "Overview");	// Default view.
@@ -121,13 +120,14 @@ public abstract class QueryLayout extends JPanel {
 			searchField.setMargin(new Insets(6, 6, 6, 6));
 			topPanel.add(searchField);
 			
-			Component horizontalStrut = Box.createHorizontalStrut(5);
-			topPanel.add(horizontalStrut);
+			topPanel.add(Box.createHorizontalStrut(5));
 			
 			// Search button.
 			JButton searchButton = new IconButton(
 				"/search.png", e -> searchFunction(searchField.getText()));
 			topPanel.add(searchButton);
+			
+			// TODO: ADD TABLE FILTERS
 			
 			JPanel innerPanel = new JPanel();
 			innerPanel.setLayout(new BorderLayout(0, 0));
@@ -135,6 +135,8 @@ public abstract class QueryLayout extends JPanel {
 			
 			JScrollPane scrollPane = new JScrollPane();
 			scrollPane.getViewport().setBackground(Color.WHITE);
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 			
 			scrollPane.setViewportView(table);
 			table.setFillsViewportHeight(true);
@@ -152,8 +154,7 @@ public abstract class QueryLayout extends JPanel {
 				buttonSize, true, buttonFont, e -> displayPage("Add"));
 			rightPanel.add(addButton);
 			
-			Component verticalStrut = Box.createVerticalStrut(10);
-			rightPanel.add(verticalStrut);
+			rightPanel.add(Box.createVerticalStrut(10));
 			
 			// Modify button.
 			JButton modifyButton = new ColoredButton(
@@ -172,8 +173,7 @@ public abstract class QueryLayout extends JPanel {
 				});
 			rightPanel.add(modifyButton);
 			
-			Component verticalStrut2 = Box.createVerticalStrut(10);
-			rightPanel.add(verticalStrut2);
+			rightPanel.add(Box.createVerticalStrut(10));
 			
 			// Delete button.
 			JButton deleteButton = new ColoredButton(
@@ -189,7 +189,7 @@ public abstract class QueryLayout extends JPanel {
 							"Delete Record",
 							JOptionPane.YES_NO_OPTION);
 						if (confirm == JOptionPane.YES_OPTION) {
-							deleteFunction();
+							deleteFunction(table.getValueAt(selectedRow, 0));
 						}
 					}
 					else {
