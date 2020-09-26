@@ -3,8 +3,7 @@ package UI.Components;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.*;
 
 import Static.Palette;
 
@@ -20,24 +19,35 @@ public abstract class QueryLayout extends JPanel {
 	
 	private CardLayout content;
 	private JPanel contentPanel;
-	private JTable table;
 	
-	// Override to set the page title.
-	protected JLabel titleLabel = new JLabel();
-	protected JLabel addTitleLabel = new JLabel();
-	protected JLabel modifyTitleLabel = new JLabel();
+	private JTable table = new CustomTable();
 	
-	// Override to set content.
-	protected abstract void setDatabaseView(JTable table);	
+	private JLabel titleLabel = new JLabel();
+	private JLabel addTitleLabel = new JLabel();
+	private JLabel modifyTitleLabel = new JLabel();
+	
+	// Override to set functions.
+	protected abstract TableModel setTable();
 	protected abstract void searchFunction(String query);
-	protected abstract void setAddPage(JPanel addContent);
-	protected abstract void setModifyPage(JPanel modifyContent);
+	protected abstract JPanel setAddPanel();
+	protected abstract JPanel setModifyPanel();
 	protected abstract void deleteFunction(Object selectedRowValue);
+	
+	protected void setTitles(String title, String addTitle, String modifyTitle) {
+		titleLabel.setText(title);
+		addTitleLabel.setText(addTitle);
+		modifyTitleLabel.setText(modifyTitle);
+	}
+	
+	protected void displayPage(String viewName) {
+		content.show(contentPanel, viewName);
+	}
 
 	public QueryLayout() {
 		setBorder(new EmptyBorder(20, 20, 20, 20));
 		setLayout(new BorderLayout());
 		
+		// Title panel
 		JPanel titlePanel = new JPanel();
 		titlePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		titlePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -62,7 +72,6 @@ public abstract class QueryLayout extends JPanel {
 		// 'Add page' and 'Modify page'
 		JPanel addView = new JPanel();
 		JPanel modifyView = new JPanel();
-		
 		addView.setOpaque(false);
 		addView.setLayout(new BorderLayout());
 		modifyView.setOpaque(false);
@@ -74,33 +83,20 @@ public abstract class QueryLayout extends JPanel {
 		modifyView.add(new TitleAndClose(modifyTitleLabel, 
 			e -> displayPage("Overview")), BorderLayout.NORTH);
 		
-		// Initialize all content.
-		table =  new CustomTable();
-		JPanel addContent = new JPanel();
-		JPanel modifyContent = new JPanel();
+		// Java doesn't have a Coalesce operator :)
+		TableModel model = ((model = setTable()) != null) ? model : new DefaultTableModel();
+		JPanel addPanel = (addPanel = setAddPanel()) != null ? addPanel : new JPanel();
+		JPanel modifyPanel = (modifyPanel = setModifyPanel()) != null ? modifyPanel : new JPanel();
 		
-		addContent.setOpaque(false);
-		addContent.setLayout(new GridBagLayout());
-		addContent.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-		modifyContent.setOpaque(false);
-		modifyContent.setLayout(new GridBagLayout());
-		modifyContent.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+		// Table content, 'Add page' content, 'Modify page' content
+		table.setModel(model);
+		addView.add(addPanel, BorderLayout.CENTER);
+		modifyView.add(modifyPanel, BorderLayout.CENTER);
 		
-		setDatabaseView(table);
-		setAddPage(addContent);
-		setModifyPage(modifyContent);
-		
-		addView.add(addContent, BorderLayout.CENTER);
-		modifyView.add(modifyContent, BorderLayout.CENTER);
-		
-		// Load the content into the content panel.
-		contentPanel.add(new Overview(), "Overview");	// Default view.
+		// Load the content into the content panel
+		contentPanel.add(new Overview(), "Overview");	// Default view
 		contentPanel.add(addView, "Add");
 		contentPanel.add(modifyView, "Modify");
-	}
-	
-	protected void displayPage(String viewName) {
-		content.show(contentPanel, viewName);
 	}
 	
 	class Overview extends JPanel {

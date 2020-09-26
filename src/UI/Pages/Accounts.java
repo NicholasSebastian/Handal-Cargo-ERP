@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.sql.ResultSet;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import Dynamic.Groups;
 import Static.Database;
@@ -19,13 +20,11 @@ import UI.Components.NumberField;
 public class Accounts extends QueryLayout {
 	
 	public Accounts() {
-		titleLabel.setText("Accounts");
-		addTitleLabel.setText("Create an Account");
-		modifyTitleLabel.setText("Modify Account");
+		setTitles("Accounts", "Create an Account", "Modify Account");
 	}
-	
+
 	@Override
-	protected void setDatabaseView(JTable table) {
+	protected TableModel setTable() {
 		final String[] columns = {"Username", "Encrypted Password", "Full Name", "Group"};
 		ArrayList<String[]> data = new ArrayList<>();
 		
@@ -54,16 +53,16 @@ public class Accounts extends QueryLayout {
 		
 		// Create table and set view.
 		DefaultTableModel model = new DefaultTableModel(dataArray, columns);
-		table.setModel(model);
+		return model;
 	}
 	
 	@Override
 	protected void searchFunction(String query) {
 		System.out.println(query);
 	}
-	
+
 	@Override
-	protected void setAddPage(JPanel addContent) {
+	protected JPanel setAddPanel() {
 		HashMap<String, Component> formContent = new HashMap<>();
 		formContent.put("Username", new JTextField());
 		formContent.put("Password", new JTextField());
@@ -93,18 +92,19 @@ public class Accounts extends QueryLayout {
 		
 		JTable staffTable = new JTable();
 		
-		FormLayout2.addTo(addContent, formContent, innerFormContent, staffTable, e -> {
+		return new FormLayout2(formContent, innerFormContent, staffTable, e -> {
 			// TODO: Password Encryption
 			// TODO: Form Validation
 			
 		});
 	}
-	
-	@Override
-	protected void setModifyPage(JPanel modifyContent) {
-		
-	}
 
+	@Override
+	protected JPanel setModifyPanel() {
+		
+		return null;
+	}
+	
 	@Override
 	protected void deleteFunction(Object selectedRowValue) {
 		

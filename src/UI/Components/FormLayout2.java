@@ -10,16 +10,21 @@ import javax.swing.*;
 import Static.Palette;
 import UI.Components.ColoredButton;
 
-public class FormLayout2 {
+@SuppressWarnings("serial")
+public class FormLayout2 extends JPanel {
 	
 	private static final Font
 		formFont = new Font("Arial", Font.PLAIN, 13);
-
-	public static void addTo(JPanel addContent, 
+	
+	public FormLayout2(
 		HashMap<String, Component> formContent, 
 		HashMap<String, Component> innerformContent,
 		JTable table, Consumer<ActionEvent> function
 	) {
+		setOpaque(false);
+		setLayout(new GridBagLayout());
+		setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(5, 8, 5, 8);
@@ -33,7 +38,7 @@ public class FormLayout2 {
 			JLabel formLabel = new JLabel(entry.getKey());
 			formLabel.setFont(formFont);
 			c.gridy = i++;
-			addContent.add(formLabel, c);
+			add(formLabel, c);
 		}
 		
 		// Fields
@@ -48,7 +53,7 @@ public class FormLayout2 {
 				((JTextField) component).setMargin(new Insets(6, 6, 6, 6));
 			}
 			c.gridy = i++;
-			addContent.add(component, c);
+			add(component, c);
 		}
 		
 		// Had to move this here for option button reference
@@ -63,7 +68,7 @@ public class FormLayout2 {
 		c.gridx = 0; c.gridy = 2;
 		c.gridwidth = 2; c.weighty = 0;
 		c.fill = GridBagConstraints.NONE;
-		addContent.add(buttonPanel, c);
+		add(buttonPanel, c);
 		
 		Dimension buttonSize = new Dimension(110, 30);
 		JButton optionButton = new ColoredButton(
@@ -82,7 +87,7 @@ public class FormLayout2 {
 		c.gridx = 0; c.gridy = 3; 
 		c.gridwidth = 2; c.weighty = 1.0;
 		c.fill = GridBagConstraints.BOTH;
-		addContent.add(cardPanel, c);
+		add(cardPanel, c);
 		
 		// Finish Button
 		JButton finishButton = new ColoredButton(
@@ -99,7 +104,7 @@ public class FormLayout2 {
 		finishPanel.setMinimumSize(new Dimension(160, 30));
 		finishPanel.add(finishButton);
 		
-		addContent.add(finishPanel, c);
+		add(finishPanel, c);
 		
 		// Form content
 		JPanel formPanel = new JPanel();

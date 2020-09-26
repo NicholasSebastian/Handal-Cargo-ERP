@@ -1,6 +1,7 @@
 package UI.Pages;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
 
 import UI.Components.QueryLayout;
 
@@ -8,33 +9,36 @@ import UI.Components.QueryLayout;
 public class SeaFreight extends QueryLayout {
 
 	public SeaFreight() {
-		titleLabel.setText("Sea Freight");
-		addTitleLabel.setText("Create a Sea Freight Record");
-		modifyTitleLabel.setText("Modify a Sea Freight Record");
+		setTitles("Sea Freight", "Create a Sea Freight Record", "Modify a Sea Freight Record");
 	}
 
 	@Override
-	protected void setDatabaseView(JTable table) {
-		
+	protected TableModel setTable() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	protected void searchFunction(String query) {
-		System.out.println(query);
-	}
-
-	@Override
-	protected void setAddPage(JPanel addContent) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void setModifyPage(JPanel modifyContent) {
-		
+	protected JPanel setAddPanel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected JPanel setModifyPanel() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	protected void deleteFunction(Object selectedRowValue) {
+		// TODO Auto-generated method stub
 		
 	}
 }
