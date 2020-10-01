@@ -34,7 +34,18 @@ public class Staff {
 	
 	// From database to account object.
 	public Staff(String username) {
-		String query = String.format("SELECT * FROM staff WHERE username='%s'", username);
+		String idQuery = String.format("SELECT staffid FROM accounts WHERE username='%s'", username);
+		ResultSet reference = Database.query(idQuery);
+		String staffId = "";
+		try {
+			reference.next();
+			staffId = reference.getString(1);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		String query = String.format("SELECT * FROM staff WHERE staffid='%s'", staffId);
 		ResultSet account = Database.query(query);
 		
 		try {

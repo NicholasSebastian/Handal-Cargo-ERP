@@ -1,18 +1,18 @@
 package UI;
 
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import Static.Database;
 import Static.Encryption;
+import Static.Palette;
+import UI.Components.ColoredButton;
 
 @SuppressWarnings("serial")
 public class Portal extends JFrame {
-	
-	// TODO: LOGIN SCREEN GUI (MAKE IT BETTER)
 	
 	public static void main(String[] args) {
 		// Set the design of UI components.
@@ -33,21 +33,22 @@ public class Portal extends JFrame {
 	public Portal(Exception ok) {
 		super("Handal Cargo - Login");
 		setResizable(false);
+		setLocationRelativeTo(null);
 		
 		// Close database connection and free memory on close.
-				setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-				addWindowListener(new WindowAdapter() {
-					@Override
-					public void windowClosing(WindowEvent e) {
-						dispose();
-						Database.closeConnection();
-						System.exit(0);
-					}
-				});
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				dispose();
+				Database.closeConnection();
+				System.exit(0);
+			}
+		});
 		
 		if (ok == null) {
 			// If database ok, show login screen.
-			setSize(380, 180);
+			setSize(400, 300);
 			add(new Login());
 		}
 		else {
@@ -61,45 +62,106 @@ public class Portal extends JFrame {
 	}
 	
 	class Login extends JPanel {
+		
+		private final int iconSize = 20;
+		private final Font
+			titleFont = new Font("Arial", Font.BOLD, 18),
+			formFont = new Font("Arial", Font.PLAIN, 14),
+			buttonFont = new Font("Arial", Font.BOLD, 14);
+		
 		public Login() {
-			setLayout(null);
-			
-			// Username.
-			JLabel usernameLabel = new JLabel("Username");
-			usernameLabel.setBounds(30, 20, 80, 20);
-			JTextField usernameField = new JTextField();
-			usernameField.setBounds(130, 20, 200, 20);
-			add(usernameLabel);
-			add(usernameField);
-			
-			// Password.
-			JLabel passwordLabel = new JLabel("Password");
-			passwordLabel.setBounds(30, 50, 80, 20);
-			JPasswordField passwordField = new JPasswordField();
-			passwordField.setBounds(130, 50, 200, 20);
-			add(passwordLabel);
-			add(passwordField);
+			setLayout(new BorderLayout());
 			
 			// Initialize encryption.
 			Encryption.initialize();
+			
+			// Top panel.
+			JPanel topPanel = new JPanel();
+			topPanel.setLayout(new BorderLayout());
+			topPanel.setBackground(Palette.sideBarColor);
+			topPanel.setPreferredSize(new Dimension(0, 50));
+			add(topPanel, BorderLayout.NORTH);
+			
+			JLabel titleLabel = new JLabel("HANDAL CARGO");
+			titleLabel.setFont(titleFont);
+			titleLabel.setForeground(Color.WHITE);
+			titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+			topPanel.add(titleLabel, BorderLayout.WEST);
+			
+			// Content panel.
+			JPanel contentPanel = new JPanel();
+			contentPanel.setBackground(Color.WHITE);
+			add(contentPanel, BorderLayout.CENTER);
+			
+			contentPanel.add(Box.createRigidArea(new Dimension(400, 30)));
+			
+			// Username.
+			ImageIcon usernameIcon = new ImageIcon(this.getClass().getResource("/username.png"));
+			Image scaledUsernameImage = usernameIcon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
+			JLabel usernameLabel = new JLabel(new ImageIcon(scaledUsernameImage));
+			JTextField usernameField = new JTextField();
+			usernameLabel.setOpaque(true);
+			usernameLabel.setBackground(Palette.gray);
+			usernameLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+			usernameField.setColumns(25);
+			usernameField.setFont(formFont);
+			usernameField.setMargin(new Insets(6, 6, 6, 6));
+			usernameField.addFocusListener(new FocusListener() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					usernameLabel.setBackground(Palette.blue);
+				}
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					usernameLabel.setBackground(Palette.gray);
+				}
+			});
+			contentPanel.add(usernameLabel);
+			contentPanel.add(usernameField);
+			
+			contentPanel.add(Box.createRigidArea(new Dimension(400, 10)));
+			
+			// Password.
+			ImageIcon passwordIcon = new ImageIcon(this.getClass().getResource("/password.png"));
+			Image scaledPasswordImage = passwordIcon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
+			JLabel passwordLabel = new JLabel(new ImageIcon(scaledPasswordImage));
+			JPasswordField passwordField = new JPasswordField();
+			passwordLabel.setOpaque(true);
+			passwordLabel.setBackground(Palette.gray);
+			passwordLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+			passwordField.setColumns(25);
+			passwordField.setFont(formFont);
+			passwordField.setMargin(new Insets(6, 6, 6, 6));
+			passwordField.addFocusListener(new FocusListener() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					passwordLabel.setBackground(Palette.blue);
+				}
+				@Override
+				public void focusLost(FocusEvent e) {
+					passwordLabel.setBackground(Palette.gray);
+				}
+			});
+			contentPanel.add(passwordLabel);
+			contentPanel.add(passwordField);
+			
+			contentPanel.add(Box.createRigidArea(new Dimension(400, 10)));
 
 			// Login Button and functionality.
-			JButton loginButton = new JButton("Login");
-			loginButton.setBounds(80, 80, 100, 40);
-			loginButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
+			JButton loginButton = new ColoredButton(
+				"Login", Palette.blue, Palette.blueHover, new Dimension(100, 40), true, buttonFont, 
+				e -> {
 					String username = usernameField.getText();
 					String password = String.valueOf(passwordField.getPassword());
-					
-					// TODO: PASSWORD ENCRYPTION (ENCRYPT PASSWORD INPUT THEN QUERY)
+					String encryptedPassword = Encryption.encrypt(password);
 					
 					// Authentication.
 					String query = "SELECT EXISTS ( SELECT * FROM accounts WHERE username = ? AND password = ? )";
 					ResultSet results = Database.query(query, statement -> {
 						try {
 							statement.setString(1, username);
-							statement.setString(2, password);
+							statement.setString(2, encryptedPassword);
 						}
 						catch(SQLException ex) {
 							Database.printErrors(ex);
@@ -122,9 +184,9 @@ public class Portal extends JFrame {
 					catch(SQLException ex) {
 						Database.printErrors(ex);
 					}
-				}
-			});
-			add(loginButton);
+				});
+			Portal.this.getRootPane().setDefaultButton(loginButton);
+			contentPanel.add(loginButton);
 		}
 	}
 	

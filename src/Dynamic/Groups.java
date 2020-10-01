@@ -1,5 +1,6 @@
 package Dynamic;
 
+import java.util.Map.Entry;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.sql.ResultSet;
@@ -40,5 +41,15 @@ public class Groups {
 	// Get the role name from the id.
 	public static String getRoleName(int roleId) {
 		return groups.get(roleId).getKey();
+	}
+	
+	// Get the role id from the name.
+	public static int getRoleId(String roleName) {
+		for (Entry<Integer, SimpleEntry<String, boolean[]>> entry : groups.entrySet()) {
+			if (entry.getValue().getKey() == roleName) {
+				return entry.getKey();
+			}
+		}
+		return 0;
 	}
 }

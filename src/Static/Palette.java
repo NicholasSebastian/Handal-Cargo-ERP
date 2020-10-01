@@ -13,6 +13,7 @@ public class Palette {
 		yellowHover = new Color(228, 142, 0),
 		red = new Color(236, 90, 47),
 		redHover = new Color(211, 80, 40),
+		gray = new Color(150, 150, 150),
 		
 		headerColor = new Color(0, 119, 182),
 		profileHoverColor = new Color(35, 110, 165),

@@ -3,6 +3,8 @@ package UI.Components;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.table.*;
 
 import Static.Palette;
@@ -136,6 +138,12 @@ public abstract class QueryLayout extends JPanel {
 			
 			scrollPane.setViewportView(table);
 			table.setFillsViewportHeight(true);
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+			
+			JTableHeader header = table.getTableHeader();
+			header.setOpaque(false);
+			header.setBackground(Palette.headerColor);
+			header.setForeground(Color.WHITE);
 			
 			innerPanel.add(scrollPane, BorderLayout.CENTER);
 			

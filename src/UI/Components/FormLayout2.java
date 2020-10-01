@@ -1,11 +1,15 @@
 package UI.Components;
 
 import java.util.Map.Entry;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.function.Consumer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.JTableHeader;
 
 import Static.Palette;
 import UI.Components.ColoredButton;
@@ -16,9 +20,14 @@ public class FormLayout2 extends JPanel {
 	private static final Font
 		formFont = new Font("Arial", Font.PLAIN, 13);
 	
+	private JTable table;
+	
+	// TODO: Refresh not fucking working.	
+	// TODO: Database accounts and staff data showing is fucked up also.
+	
 	public FormLayout2(
-		HashMap<String, Component> formContent, 
-		HashMap<String, Component> innerformContent,
+		LinkedHashMap<String, Component> formContent, 
+		LinkedHashMap<String, Component> innerformContent,
 		JTable table, Consumer<ActionEvent> function
 	) {
 		setOpaque(false);
@@ -116,6 +125,7 @@ public class FormLayout2 extends JPanel {
 		scrollForm.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
 		scrollForm.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollForm.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollForm.getVerticalScrollBar().setUnitIncrement(16);
 		
 		cardPanel.add(scrollForm, "Create");
 		
@@ -158,11 +168,19 @@ public class FormLayout2 extends JPanel {
 		formPanel.add(emptySpace, c2);
 		
 		// Staff Table content
-		table.setFillsViewportHeight(true);
-		JScrollPane scrollTable = new JScrollPane(table);
+		this.table = table;
+		this.table.setFillsViewportHeight(true);
+		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		JTableHeader header = this.table.getTableHeader();
+		header.setOpaque(false);
+		header.setBackground(Palette.headerColor);
+		header.setForeground(Color.WHITE);
+		
+		JScrollPane scrollTable = new JScrollPane(this.table);
 		scrollTable.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
 		scrollTable.getViewport().setBackground(Color.WHITE);
-		scrollTable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollTable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollTable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		cardPanel.add(scrollTable, "Existing");

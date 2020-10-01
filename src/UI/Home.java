@@ -35,6 +35,7 @@ public class Home extends JFrame {
 		setSize(defaultWindowSize);
 		setMinimumSize(minimumWindowSize);
 		// setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		setLocationRelativeTo(null);
 		
 		// Close database connection and free memory on close.
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
