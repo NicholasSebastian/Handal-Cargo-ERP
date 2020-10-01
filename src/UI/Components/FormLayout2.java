@@ -22,9 +22,6 @@ public class FormLayout2 extends JPanel {
 	
 	private JTable table;
 	
-	// TODO: Refresh not fucking working.	
-	// TODO: Database accounts and staff data showing is fucked up also.
-	
 	public FormLayout2(
 		LinkedHashMap<String, Component> formContent, 
 		LinkedHashMap<String, Component> innerformContent,

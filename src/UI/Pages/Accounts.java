@@ -21,6 +21,9 @@ import UI.Components.NumberField;
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })
 public class Accounts extends QueryLayout {
 	
+	// TODO: Refresh not fucking working.	
+	// TODO: Database accounts and staff data showing is fucked up also.
+	
 	public Accounts() {
 		setTitles("Accounts", "Create an Account", "Modify Account");
 	}
