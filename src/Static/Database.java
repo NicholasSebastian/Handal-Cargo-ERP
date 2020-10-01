@@ -11,7 +11,7 @@ public class Database {
 	static Connection connection;
 	
 	static final String 
-	    hostname = "192.168.1.112", 
+	    hostname = "192.168.1.110", 
 	    port = "3306",	// Default value. Can be changed in the my.ini file.
 	    databaseName = "handalcargo",
 	    user = "handalcargo",

@@ -21,8 +21,7 @@ import UI.Components.NumberField;
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })
 public class Accounts extends QueryLayout {
 	
-	// TODO: Refresh not fucking working.	
-	// TODO: Database accounts and staff data showing is fucked up also.
+	// TODO: Refresh not fucking working.
 	
 	public Accounts() {
 		setTitles("Accounts", "Create an Account", "Modify Account");
@@ -35,13 +34,16 @@ public class Accounts extends QueryLayout {
 		
 		try {
 			ResultSet results = Database.query("SELECT * FROM accounts");
-			ResultSet details = Database.query("SELECT `name`, `group` FROM staff");
 			
-			while (results.next() && details.next()) {
+			while (results.next()) {
+				String staffId = results.getString("staffid");
+				ResultSet details = Database.query("SELECT `name`, `group` FROM staff WHERE staffId=" + staffId);
+				details.next();
+				
 				data.add(new String[] {
 					results.getString("username"), 
 					results.getString("password"), 
-					details.getString("name"), 
+					details.getString("name"),
 					Groups.getRoleName(details.getInt("group"))
 				});
 			}
