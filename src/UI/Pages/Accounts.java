@@ -6,6 +6,8 @@ import java.awt.Component;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -96,13 +98,13 @@ public class Accounts extends QueryLayout {
 		innerFormContent.put("Active", new SliderButton());
 		innerFormContent.put("Employment Date", new DatePicker());
 		
-		ArrayList<String[]> data = new ArrayList<>();
 		final String[] columns = {
 			"Staff ID", "Full Name", "Group", "Address", "Kelurahan", "City", "Phone Number", "Mobile Number",
 			"Sex", "Religion", "Birth Place", "Birthday", "Lembur", "Salary", "Allowance", "THR", "Bonus", 
 			"Active", "Employment Date"
 		};
 		
+		ArrayList<String[]> data = new ArrayList<>();
 		ResultSet staffResults = Database.query("SELECT * FROM staff");
 		try {
 			while (staffResults.next()) {
@@ -141,39 +143,82 @@ public class Accounts extends QueryLayout {
 		
 		JTable staffTable = new JTable(dataArray, columns);
 		
-		return new FormLayout2(formContent, innerFormContent, staffTable, e -> {
-			
-			// TODO: Form Validation
-			
-			Database.update(
-				"INSERT INTO staff (`name`, `group`, `address`, `kelurahan`, `city`, `phone`, `mobile`, `sex`, `religion`, " +
+		return new FormLayout2(formContent, innerFormContent, staffTable, formPage -> {
+			if (formPage) {
+				
+				// TODO: Form Validation
+				
+				Database.update(
+					"INSERT INTO staff (`name`, `group`, `address`, `kelurahan`, `city`, `phone`, `mobile`, `sex`, `religion`, " +
 						"`birthplace`, `birthday`, `lembur`, `salary`, `allowance`, `thr`, `bonus`, `active`, `employmentdate`) " + 
-				"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-				statement -> {
-					try {
-						statement.setString(1, ((JTextField) innerFormContent.get("Name")).getText());
-						statement.setInt(2, Groups.getRoleId((String) ((JComboBox) innerFormContent.get("Group")).getSelectedItem()));
-						statement.setString(3, ((JTextField) innerFormContent.get("Address")).getText());
-						statement.setString(4, ((JTextField) innerFormContent.get("Kelurahan")).getText());
-						statement.setString(5, ((JTextField) innerFormContent.get("City")).getText());
-						statement.setString(6, ((JTextField) innerFormContent.get("Phone")).getText());
-						statement.setString(7, ((JTextField) innerFormContent.get("Mobile")).getText());
-						statement.setBoolean(8, ((JComboBox) innerFormContent.get("Sex")).getSelectedItem() == "Female" ? true : false);
-						statement.setString(9, ((JTextField) innerFormContent.get("Religion")).getText());
-						statement.setString(10, ((JTextField) innerFormContent.get("Birth Place")).getText());
-						statement.setDate(11, ((DatePicker) innerFormContent.get("Birthday")).getDate());
-						statement.setInt(12, Integer.valueOf(((NumberField) innerFormContent.get("Lembur")).getText()));
-						statement.setInt(13, Integer.valueOf(((NumberField) innerFormContent.get("Salary")).getText()));
-						statement.setInt(14, Integer.valueOf(((NumberField) innerFormContent.get("Allowance")).getText()));
-						statement.setInt(15, Integer.valueOf(((NumberField) innerFormContent.get("THR")).getText()));
-						statement.setInt(16, Integer.valueOf(((NumberField) innerFormContent.get("Bonus")).getText()));
-						statement.setBoolean(17, ((SliderButton) innerFormContent.get("Active")).isSelected());
-						statement.setDate(18, ((DatePicker) innerFormContent.get("Employment Date")).getDate());
-					}
-					catch (Exception ex) {
-						ex.printStackTrace();
-					}
-				});
+					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+					statement -> {
+						try {
+							statement.setString(1, ((JTextField) innerFormContent.get("Name")).getText());
+							statement.setInt(2, Groups.getRoleId((String) ((JComboBox) innerFormContent.get("Group")).getSelectedItem()));
+							statement.setString(3, ((JTextField) innerFormContent.get("Address")).getText());
+							statement.setString(4, ((JTextField) innerFormContent.get("Kelurahan")).getText());
+							statement.setString(5, ((JTextField) innerFormContent.get("City")).getText());
+							statement.setString(6, ((JTextField) innerFormContent.get("Phone")).getText());
+							statement.setString(7, ((JTextField) innerFormContent.get("Mobile")).getText());
+							statement.setBoolean(8, ((JComboBox) innerFormContent.get("Sex")).getSelectedItem() == "Female" ? true : false);
+							statement.setString(9, ((JTextField) innerFormContent.get("Religion")).getText());
+							statement.setString(10, ((JTextField) innerFormContent.get("Birth Place")).getText());
+							statement.setDate(11, ((DatePicker) innerFormContent.get("Birthday")).getDate());
+							statement.setFloat(12, Float.parseFloat(((NumberField) innerFormContent.get("Lembur")).getText()));
+							statement.setFloat(13, Float.parseFloat(((NumberField) innerFormContent.get("Salary")).getText()));
+							statement.setFloat(14, Float.parseFloat(((NumberField) innerFormContent.get("Allowance")).getText()));
+							statement.setFloat(15, Float.parseFloat(((NumberField) innerFormContent.get("THR")).getText()));
+							statement.setFloat(16, Float.parseFloat(((NumberField) innerFormContent.get("Bonus")).getText()));
+							statement.setBoolean(17, ((SliderButton) innerFormContent.get("Active")).isSelected());
+							statement.setDate(18, ((DatePicker) innerFormContent.get("Employment Date")).getDate());
+						}
+						catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					});
+			}
+			else {
+				int selectedRow = staffTable.getSelectedRow();
+				if (selectedRow != -1) {
+					Database.update(
+						"INSERT INTO staff (`name`, `group`, `address`, `kelurahan`, `city`, `phone`, `mobile`, `sex`, `religion`, " +
+							"`birthplace`, `birthday`, `lembur`, `salary`, `allowance`, `thr`, `bonus`, `active`, `employmentdate`) " + 
+						"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+						statement -> {
+							try {
+								statement.setString(1, (String) staffTable.getValueAt(selectedRow, 1));
+								statement.setInt(2, Integer.parseInt((String) staffTable.getValueAt(selectedRow, 2)));
+								statement.setString(3, (String) staffTable.getValueAt(selectedRow, 3));
+								statement.setString(4, (String) staffTable.getValueAt(selectedRow, 4));
+								statement.setString(5, (String) staffTable.getValueAt(selectedRow, 5));
+								statement.setString(6, (String) staffTable.getValueAt(selectedRow, 6));
+								statement.setString(7, (String) staffTable.getValueAt(selectedRow, 7));
+								statement.setBoolean(8, Boolean.parseBoolean((String) staffTable.getValueAt(selectedRow, 8)));
+								statement.setString(9, (String) staffTable.getValueAt(selectedRow, 9));
+								statement.setString(10, (String) staffTable.getValueAt(selectedRow, 10));
+								statement.setDate(11, Date.valueOf((String) staffTable.getValueAt(selectedRow, 11)));
+								statement.setFloat(12, Float.parseFloat((String) staffTable.getValueAt(selectedRow, 12)));
+								statement.setFloat(13, Float.parseFloat((String) staffTable.getValueAt(selectedRow, 13)));
+								statement.setFloat(14, Float.parseFloat((String) staffTable.getValueAt(selectedRow, 14)));
+								statement.setFloat(15, Float.parseFloat((String) staffTable.getValueAt(selectedRow, 15)));
+								statement.setFloat(16, Float.parseFloat((String) staffTable.getValueAt(selectedRow, 16)));
+								statement.setBoolean(17, Boolean.parseBoolean((String) staffTable.getValueAt(selectedRow, 17)));
+								statement.setDate(18, Date.valueOf((String) staffTable.getValueAt(selectedRow, 18)));
+							}
+							catch (Exception ex) {
+								ex.printStackTrace();
+							}
+						});
+				}
+				else {
+					JOptionPane.showMessageDialog(
+						Accounts.this.getParent(), 
+						"Select an entry for the account first!",
+						"Create an Account",
+						JOptionPane.ERROR_MESSAGE);
+				}
+			}
 			
 			Database.update("INSERT INTO accounts VALUES (?, ?, LAST_INSERT_ID())", 
 					statement -> {

@@ -25,7 +25,7 @@ public class FormLayout2 extends JPanel {
 	public FormLayout2(
 		LinkedHashMap<String, Component> formContent, 
 		LinkedHashMap<String, Component> innerformContent,
-		JTable table, Consumer<ActionEvent> function
+		JTable table, Consumer<Boolean> submitFunction
 	) {
 		setOpaque(false);
 		setLayout(new GridBagLayout());
@@ -95,10 +95,12 @@ public class FormLayout2 extends JPanel {
 		c.fill = GridBagConstraints.BOTH;
 		add(cardPanel, c);
 		
+		
 		// Finish Button
 		JButton finishButton = new ColoredButton(
 			"Create Account", Palette.blue, Palette.blueHover, 
-			new Dimension(140, 30), true, formFont, function);
+			new Dimension(140, 30), true, formFont, 
+			e -> submitFunction.accept(cardPanel.getComponent(0).isVisible()));
 		c.gridx = 1; c.gridy = 4;
 		c.gridwidth = 1; c.weighty = 0;
 		c.fill = GridBagConstraints.NONE;
@@ -124,7 +126,8 @@ public class FormLayout2 extends JPanel {
 		scrollForm.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollForm.getVerticalScrollBar().setUnitIncrement(16);
 		
-		cardPanel.add(scrollForm, "Create");
+		scrollForm.setName("Create");
+		cardPanel.add(scrollForm, scrollForm.getName());
 		
 		GridBagConstraints c2 = new GridBagConstraints();
 		c2.fill = GridBagConstraints.HORIZONTAL;
@@ -180,6 +183,7 @@ public class FormLayout2 extends JPanel {
 		scrollTable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollTable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
-		cardPanel.add(scrollTable, "Existing");
+		scrollTable.setName("Existing");
+		cardPanel.add(scrollTable, scrollTable.getName());
 	}
 }
