@@ -20,4 +20,12 @@ public class NumberField extends JTextField {
 		e.consume();
 		return;
 	}
+	
+	public float getValue() {
+		String text = getText();
+		if (!text.isEmpty()) {
+			return Float.parseFloat(text);
+		}
+		return 0;
+	}
 }

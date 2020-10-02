@@ -7,7 +7,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -19,6 +18,7 @@ import UI.Components.SliderButton;
 import UI.Components.DatePicker;
 import UI.Components.FormLayout2;
 import UI.Components.NumberField;
+import UI.Components.CustomTable;
 
 @SuppressWarnings({ "serial", "rawtypes", "unchecked" })
 public class Accounts extends QueryLayout {
@@ -111,13 +111,13 @@ public class Accounts extends QueryLayout {
 				data.add(new String[] {
 					staffResults.getString(1),
 					staffResults.getString(2),
-					staffResults.getString(3),
+					Groups.getRoleName(staffResults.getInt(3)),
 					staffResults.getString(4),
 					staffResults.getString(5),
 					staffResults.getString(6),
 					staffResults.getString(7),
 					staffResults.getString(8),
-					staffResults.getString(9),
+					staffResults.getBoolean(9) ? "Female" : "Male",
 					staffResults.getString(10),
 					staffResults.getString(11),
 					staffResults.getString(12),
@@ -126,7 +126,7 @@ public class Accounts extends QueryLayout {
 					staffResults.getString(15),
 					staffResults.getString(16),
 					staffResults.getString(17),
-					staffResults.getString(18),
+					staffResults.getBoolean(18) ? "Active" :  "Inactive",
 					staffResults.getString(19),
 				});
 			}
@@ -141,13 +141,31 @@ public class Accounts extends QueryLayout {
 			dataArray[i] = data.get(i);
 		}
 		
-		JTable staffTable = new JTable(dataArray, columns);
+		JTable staffTable = new CustomTable();
+		staffTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		staffTable.setModel(new DefaultTableModel(dataArray, columns));
+		for (int i = 0; i < columns.length; i++) {
+			staffTable.getColumnModel().getColumn(i).setPreferredWidth(100);
+		}
 		
 		return new FormLayout2(formContent, innerFormContent, staffTable, formPage -> {
 			if (formPage) {
 				
-				// TODO: Form Validation
+				// Form Validation, if required, prompt, if not, fill default value.
+				if (((JTextField) formContent.get("Username")).getText().isEmpty()) {
+					JOptionPane.showMessageDialog(Accounts.this, "Username must be entered.");
+					return;
+				}
+				else if (((JPasswordField) formContent.get("Password")).getPassword().length == 0) {
+					JOptionPane.showMessageDialog(Accounts.this, "Password must be entered.");
+					return;
+				}
+				else if (((JTextField) innerFormContent.get("Name")).getText().isEmpty()) {
+					JOptionPane.showMessageDialog(Accounts.this, "Name must be entered.");
+					return;
+				}
 				
+				// Add a new staff entry to the database.
 				Database.update(
 					"INSERT INTO staff (`name`, `group`, `address`, `kelurahan`, `city`, `phone`, `mobile`, `sex`, `religion`, " +
 						"`birthplace`, `birthday`, `lembur`, `salary`, `allowance`, `thr`, `bonus`, `active`, `employmentdate`) " + 
@@ -165,11 +183,11 @@ public class Accounts extends QueryLayout {
 							statement.setString(9, ((JTextField) innerFormContent.get("Religion")).getText());
 							statement.setString(10, ((JTextField) innerFormContent.get("Birth Place")).getText());
 							statement.setDate(11, ((DatePicker) innerFormContent.get("Birthday")).getDate());
-							statement.setFloat(12, Float.parseFloat(((NumberField) innerFormContent.get("Lembur")).getText()));
-							statement.setFloat(13, Float.parseFloat(((NumberField) innerFormContent.get("Salary")).getText()));
-							statement.setFloat(14, Float.parseFloat(((NumberField) innerFormContent.get("Allowance")).getText()));
-							statement.setFloat(15, Float.parseFloat(((NumberField) innerFormContent.get("THR")).getText()));
-							statement.setFloat(16, Float.parseFloat(((NumberField) innerFormContent.get("Bonus")).getText()));
+							statement.setFloat(12, ((NumberField) innerFormContent.get("Lembur")).getValue());
+							statement.setFloat(13, ((NumberField) innerFormContent.get("Salary")).getValue());
+							statement.setFloat(14, ((NumberField) innerFormContent.get("Allowance")).getValue());
+							statement.setFloat(15, ((NumberField) innerFormContent.get("THR")).getValue());
+							statement.setFloat(16, ((NumberField) innerFormContent.get("Bonus")).getValue());
 							statement.setBoolean(17, ((SliderButton) innerFormContent.get("Active")).isSelected());
 							statement.setDate(18, ((DatePicker) innerFormContent.get("Employment Date")).getDate());
 						}
@@ -177,50 +195,8 @@ public class Accounts extends QueryLayout {
 							ex.printStackTrace();
 						}
 					});
-			}
-			else {
-				int selectedRow = staffTable.getSelectedRow();
-				if (selectedRow != -1) {
-					Database.update(
-						"INSERT INTO staff (`name`, `group`, `address`, `kelurahan`, `city`, `phone`, `mobile`, `sex`, `religion`, " +
-							"`birthplace`, `birthday`, `lembur`, `salary`, `allowance`, `thr`, `bonus`, `active`, `employmentdate`) " + 
-						"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-						statement -> {
-							try {
-								statement.setString(1, (String) staffTable.getValueAt(selectedRow, 1));
-								statement.setInt(2, Integer.parseInt((String) staffTable.getValueAt(selectedRow, 2)));
-								statement.setString(3, (String) staffTable.getValueAt(selectedRow, 3));
-								statement.setString(4, (String) staffTable.getValueAt(selectedRow, 4));
-								statement.setString(5, (String) staffTable.getValueAt(selectedRow, 5));
-								statement.setString(6, (String) staffTable.getValueAt(selectedRow, 6));
-								statement.setString(7, (String) staffTable.getValueAt(selectedRow, 7));
-								statement.setBoolean(8, Boolean.parseBoolean((String) staffTable.getValueAt(selectedRow, 8)));
-								statement.setString(9, (String) staffTable.getValueAt(selectedRow, 9));
-								statement.setString(10, (String) staffTable.getValueAt(selectedRow, 10));
-								statement.setDate(11, Date.valueOf((String) staffTable.getValueAt(selectedRow, 11)));
-								statement.setFloat(12, Float.parseFloat((String) staffTable.getValueAt(selectedRow, 12)));
-								statement.setFloat(13, Float.parseFloat((String) staffTable.getValueAt(selectedRow, 13)));
-								statement.setFloat(14, Float.parseFloat((String) staffTable.getValueAt(selectedRow, 14)));
-								statement.setFloat(15, Float.parseFloat((String) staffTable.getValueAt(selectedRow, 15)));
-								statement.setFloat(16, Float.parseFloat((String) staffTable.getValueAt(selectedRow, 16)));
-								statement.setBoolean(17, Boolean.parseBoolean((String) staffTable.getValueAt(selectedRow, 17)));
-								statement.setDate(18, Date.valueOf((String) staffTable.getValueAt(selectedRow, 18)));
-							}
-							catch (Exception ex) {
-								ex.printStackTrace();
-							}
-						});
-				}
-				else {
-					JOptionPane.showMessageDialog(
-						Accounts.this.getParent(), 
-						"Select an entry for the account first!",
-						"Create an Account",
-						JOptionPane.ERROR_MESSAGE);
-				}
-			}
-			
-			Database.update("INSERT INTO accounts VALUES (?, ?, LAST_INSERT_ID())", 
+				
+				Database.update("INSERT INTO accounts VALUES (?, ?, LAST_INSERT_ID())", 
 					statement -> {
 						try {
 							statement.setString(1, ((JTextField) formContent.get("Username")).getText());
@@ -232,6 +208,32 @@ public class Accounts extends QueryLayout {
 							ex.printStackTrace();
 						}
 				});
+			}
+			else {
+				int selectedRow = staffTable.getSelectedRow();
+				if (selectedRow != -1) {
+					Database.update("INSERT INTO accounts VALUES (?, ?, ?)", 
+						statement -> {
+							try {
+								statement.setString(1, ((JTextField) formContent.get("Username")).getText());
+								statement.setString(2, Encryption.encrypt(
+										String.valueOf(((JPasswordField) formContent.get("Password")).getPassword())
+								));
+								statement.setInt(3, Integer.parseInt((String) staffTable.getValueAt(selectedRow, 0)));
+							} 
+							catch (Exception ex) {
+								ex.printStackTrace();
+							}
+					});
+				}
+				else {
+					JOptionPane.showMessageDialog(
+						Accounts.this.getParent(), 
+						"Select an entry for the account first!",
+						"Create an Account",
+						JOptionPane.ERROR_MESSAGE);
+				}
+			}
 		});
 	}
 

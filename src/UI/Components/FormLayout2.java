@@ -17,6 +17,7 @@ import UI.Components.ColoredButton;
 @SuppressWarnings("serial")
 public class FormLayout2 extends JPanel {
 	
+	private static final int tableRowHeight = 20;
 	private static final Font
 		formFont = new Font("Arial", Font.PLAIN, 13);
 	
@@ -169,8 +170,6 @@ public class FormLayout2 extends JPanel {
 		
 		// Staff Table content
 		this.table = table;
-		this.table.setFillsViewportHeight(true);
-		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		JTableHeader header = this.table.getTableHeader();
 		header.setOpaque(false);

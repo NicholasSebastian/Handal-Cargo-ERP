@@ -3,8 +3,6 @@ package UI.Components;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 import javax.swing.table.*;
 
 import Static.Palette;
@@ -135,10 +133,8 @@ public abstract class QueryLayout extends JPanel {
 			scrollPane.getViewport().setBackground(Color.WHITE);
 			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-			
 			scrollPane.setViewportView(table);
-			table.setFillsViewportHeight(true);
-			table.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+			table.setRowHeight(tableRowHeight);
 			
 			JTableHeader header = table.getTableHeader();
 			header.setOpaque(false);
@@ -209,53 +205,6 @@ public abstract class QueryLayout extends JPanel {
 			innerPanel.add(rightPanel, BorderLayout.EAST);
 			add(topPanel, BorderLayout.NORTH);
 			add(innerPanel, BorderLayout.CENTER);
-		}
-	}
-	
-	class CustomTable extends JTable {
-		
-		public CustomTable() {
-			setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			setRowHeight(tableRowHeight);
-			setSelectionBackground(Palette.tableSelectColor);
-			setSelectionForeground(Color.WHITE);
-			setShowGrid(false);
-			setIntercellSpacing(new Dimension(0, 0));
-			
-			// Remove cell highlight border.
-			setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-			    @Override
-			    public Component getTableCellRendererComponent(JTable table, Object value,
-			            boolean isSelected, boolean hasFocus, int row, int column) {
-			    	hasFocus = false;
-			        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-			    }
-			});
-		}
-		
-		@Override	// Allows deselecting of selected rows.
-		public void changeSelection(
-			int rowIndex, int columnIndex, boolean toggle, boolean extend
-	    ) {
-	        super.changeSelection(rowIndex, columnIndex, true, false);
-		}
-		
-		@Override	// Disable cell editing.
-		public boolean isCellEditable(int row, int column) {
-			return false;
-		}
-		
-		@Override	// Alternating row colors.
-		public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-			Component returnComp = super.prepareRenderer(renderer, row, column);
-	        Color alternateColor = Palette.tableAlternateColor;
-	        Color whiteColor = Color.WHITE;
-	        if (!returnComp.getBackground().equals(getSelectionBackground())){
-	            Color bg = (row % 2 == 0 ? alternateColor : whiteColor);
-	            returnComp .setBackground(bg);
-	            bg = null;
-	        }
-	        return returnComp;
 		}
 	}
 }
