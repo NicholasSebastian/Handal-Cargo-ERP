@@ -3,6 +3,7 @@ package UI.Pages;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.awt.Component;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
