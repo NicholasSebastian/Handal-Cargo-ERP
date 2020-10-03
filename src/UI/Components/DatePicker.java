@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.util.Arrays;
@@ -20,15 +21,19 @@ public class DatePicker extends JPanel {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		setOpaque(false);
 		
+		LocalDate currentDate = LocalDate.now();
+		
 		int[] dates = IntStream.rangeClosed(1, 31).toArray();
 		Integer[] convertedDates = Arrays.stream(dates).boxed().toArray(Integer[]::new);
 		date = new JComboBox<Integer>(convertedDates);
+		date.setSelectedItem(currentDate.getDayOfMonth());
 		add(date);
 		
 		month = new JComboBox<>(Month.values());
+		month.setSelectedItem(currentDate.getMonth());
 		add(month);
 		
-		int currentYear = Year.now().getValue();
+		int currentYear = currentDate.getYear();
 		int[] years = IntStream.rangeClosed(currentYear - 25, currentYear + 25).toArray();
 		Integer[] convertedYears = Arrays.stream(years).boxed().toArray(Integer[]::new);
 		year = new JComboBox<>(convertedYears);
