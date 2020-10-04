@@ -198,6 +198,7 @@ public abstract class QueryLayout extends JPanel {
 							JOptionPane.YES_NO_OPTION);
 						if (confirm == JOptionPane.YES_OPTION) {
 							deleteFunction(table.getValueAt(selectedRow, 0));
+							JOptionPane.showMessageDialog(QueryLayout.this.getParent(), "Entry deleted successfully.");
 						}
 					}
 					else {

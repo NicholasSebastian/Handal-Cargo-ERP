@@ -95,7 +95,10 @@ public class FormLayout2 extends JPanel {
 		JButton finishButton = new ColoredButton(
 			buttonText, Palette.blue, Palette.blueHover, 
 			new Dimension(140, 30), true, formFont, 
-			e -> submitFunction.accept(cardPanel.getComponent(0).isVisible()));
+			e -> {
+				submitFunction.accept(cardPanel.getComponent(0).isVisible());
+				JOptionPane.showMessageDialog(this.getParent(), "Entry added successfully.");
+			});
 		
 		c.gridx = 1; c.gridy = formContent.size() + 2;
 		c.gridwidth = 1; c.weighty = 0;

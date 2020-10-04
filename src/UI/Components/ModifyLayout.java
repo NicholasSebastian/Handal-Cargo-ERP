@@ -110,7 +110,10 @@ public class ModifyLayout extends JPanel {
 		JButton finishButton = new ColoredButton(
 			buttonText, Palette.blue, Palette.blueHover, 
 			new Dimension(140, 30), true, formFont, 
-			e -> submitFunction.run());
+			e -> {
+				submitFunction.run();
+				JOptionPane.showMessageDialog(this.getParent(), "Entry updated successfully.");
+			});
 		
 		c.gridx = 0; c.gridy = formContent.size();
 		c.gridwidth = 3;
