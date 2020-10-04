@@ -3,11 +3,9 @@ package UI.Pages;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.awt.Component;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -18,13 +16,19 @@ import UI.Components.QueryLayout;
 import UI.Components.SliderButton;
 import UI.Components.DatePicker;
 import UI.Components.FormLayout2;
+import UI.Components.ModifyLayout;
 import UI.Components.NumberField;
+import UI.Components.CustomComboBox;
 import UI.Components.CustomTable;
 
-@SuppressWarnings({ "serial", "rawtypes", "unchecked" })
+@SuppressWarnings({ "serial", "rawtypes" })
 public class Accounts extends QueryLayout {
 	
 	// TODO: Refresh not fucking working.
+	// Idea on how to refresh: 
+		// just like when dynamically replacing the modify pages,
+		// just abandon the old page instance in favor for a new one.
+		// Java's garbage collector will free up memory automatically assuming the old page instance has no more references.
 	
 	public Accounts() {
 		setTitles("Accounts", "Create an Account", "Modify Account");
@@ -81,13 +85,13 @@ public class Accounts extends QueryLayout {
 		
 		LinkedHashMap<String, Component> innerFormContent = new LinkedHashMap<>();
 		innerFormContent.put("Name", new JTextField());
-		innerFormContent.put("Group", new JComboBox(groups.toArray()));
+		innerFormContent.put("Group", new CustomComboBox(groups.toArray()));
 		innerFormContent.put("Address", new JTextField());
 		innerFormContent.put("Kelurahan", new JTextField());
 		innerFormContent.put("City", new JTextField());
 		innerFormContent.put("Phone", new JTextField());
 		innerFormContent.put("Mobile", new JTextField());
-		innerFormContent.put("Sex", new JComboBox(new String[] {"Male", "Female"}));
+		innerFormContent.put("Sex", new CustomComboBox(new String[] {"Male", "Female"}));
 		innerFormContent.put("Religion", new JTextField());
 		innerFormContent.put("Birth Place", new JTextField());
 		innerFormContent.put("Birthday", new DatePicker());
@@ -149,7 +153,7 @@ public class Accounts extends QueryLayout {
 			staffTable.getColumnModel().getColumn(i).setPreferredWidth(100);
 		}
 		
-		return new FormLayout2(formContent, innerFormContent, staffTable, formPage -> {
+		return new FormLayout2(formContent, innerFormContent, staffTable, "Create Account", formPage -> {
 			if (formPage) {
 				
 				// Form Validation, if required, prompt, if not, fill default value.
@@ -195,7 +199,7 @@ public class Accounts extends QueryLayout {
 						catch (Exception ex) {
 							ex.printStackTrace();
 						}
-					});
+				});
 				
 				Database.update("INSERT INTO accounts VALUES (?, ?, LAST_INSERT_ID())", 
 					statement -> {
@@ -239,9 +243,44 @@ public class Accounts extends QueryLayout {
 	}
 
 	@Override
-	protected JPanel setModifyPanel() {
+	protected JPanel setModifyPanel(Object selected) {
+		LinkedHashMap<String, Component> formContent = new LinkedHashMap<>();
 		
-		return null;
+		JTextField usernameField = new JTextField();
+		JPasswordField passwordField = new JPasswordField();
+		
+		String query = String.format("SELECT `username`, `password` FROM accounts WHERE username='%s'", selected);
+		ResultSet results = Database.query(query);
+		try {
+			results.next();
+			
+			String username = results.getString(1);
+			usernameField.setText(username);
+			
+			String password = Encryption.decrypt(results.getString(2));
+			passwordField.setText(password);
+			
+			formContent.put("Username", usernameField);
+			formContent.put("Password", passwordField);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return new ModifyLayout(formContent, "Modify Account", () -> {
+			String updateQuery = String.format("UPDATE accounts SET `username` = ?, `password` = ? WHERE `username`='%s'", selected);
+			Database.update(updateQuery, statement -> {
+				try {
+					// TODO: before updating the username, check if the username is taken first.
+					
+					statement.setString(1, usernameField.getText());
+					statement.setString(2, Encryption.encrypt(String.valueOf(passwordField.getPassword())));
+				} 
+				catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			});
+		});
 	}
 	
 	@Override

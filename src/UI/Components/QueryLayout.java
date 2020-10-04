@@ -22,6 +22,9 @@ public abstract class QueryLayout extends JPanel {
 	
 	private JTable table = new CustomTable();
 	
+	private JPanel modifyView;
+	private JPanel modifyPanel;
+	
 	private JLabel titleLabel = new JLabel();
 	private JLabel addTitleLabel = new JLabel();
 	private JLabel modifyTitleLabel = new JLabel();
@@ -30,7 +33,7 @@ public abstract class QueryLayout extends JPanel {
 	protected abstract TableModel setTable();
 	protected abstract void searchFunction(String query);
 	protected abstract JPanel setAddPanel();
-	protected abstract JPanel setModifyPanel();
+	protected abstract JPanel setModifyPanel(Object selected);
 	protected abstract void deleteFunction(Object selectedRowValue);
 	
 	protected void setTitles(String title, String addTitle, String modifyTitle) {
@@ -53,7 +56,6 @@ public abstract class QueryLayout extends JPanel {
 		titlePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		add(titlePanel, BorderLayout.NORTH);
 		
-		// Title
 		titleLabel.setFont(titleFont);
 		titlePanel.add(titleLabel);
 		
@@ -71,32 +73,26 @@ public abstract class QueryLayout extends JPanel {
 		
 		// 'Add page' and 'Modify page'
 		JPanel addView = new JPanel();
-		JPanel modifyView = new JPanel();
+		modifyView = new JPanel();
 		addView.setOpaque(false);
 		addView.setLayout(new BorderLayout());
 		modifyView.setOpaque(false);
 		modifyView.setLayout(new BorderLayout());
 		
-		// 'Add page' and 'Modify page' titles
 		addView.add(new TitleAndClose(addTitleLabel, 
 			e -> displayPage("Overview")), BorderLayout.NORTH);
 		modifyView.add(new TitleAndClose(modifyTitleLabel, 
 			e -> displayPage("Overview")), BorderLayout.NORTH);
 		
-		// Java doesn't have a Coalesce operator :)
+		// Generate static content and add.
 		TableModel model = ((model = setTable()) != null) ? model : new DefaultTableModel();
 		JPanel addPanel = (addPanel = setAddPanel()) != null ? addPanel : new JPanel();
-		JPanel modifyPanel = (modifyPanel = setModifyPanel()) != null ? modifyPanel : new JPanel();
 		
-		// Table content, 'Add page' content, 'Modify page' content
 		table.setModel(model);
 		addView.add(addPanel, BorderLayout.CENTER);
-		modifyView.add(modifyPanel, BorderLayout.CENTER);
 		
-		// Load the content into the content panel
-		contentPanel.add(new Overview(), "Overview");	// Default view
+		contentPanel.add(new Overview(), "Overview");
 		contentPanel.add(addView, "Add");
-		contentPanel.add(modifyView, "Modify");
 	}
 	
 	class Overview extends JPanel {
@@ -161,6 +157,18 @@ public abstract class QueryLayout extends JPanel {
 				"Modify", Palette.yellow, Palette.yellowHover, 
 				buttonSize, true, buttonFont, e -> {
 					if (table.getSelectedRow() != -1) {
+						// Remove old content.
+						contentPanel.remove(modifyView);
+						if (modifyPanel != null) modifyView.remove(modifyPanel);
+						
+						// Create new content.
+						modifyPanel = 
+							(modifyPanel = setModifyPanel(table.getValueAt(table.getSelectedRow(), 0))) != null ? 
+							modifyPanel : new JPanel();
+						modifyView.add(modifyPanel, BorderLayout.CENTER);
+						
+						// Add new content.
+						contentPanel.add(modifyView, "Modify");
 						displayPage("Modify");
 					}
 					else {

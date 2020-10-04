@@ -4,11 +4,7 @@ import java.util.Map.Entry;
 import java.util.LinkedHashMap;
 import java.util.function.Consumer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 
 import Static.Palette;
@@ -17,7 +13,6 @@ import UI.Components.ColoredButton;
 @SuppressWarnings("serial")
 public class FormLayout2 extends JPanel {
 	
-	private static final int tableRowHeight = 20;
 	private static final Font
 		formFont = new Font("Arial", Font.PLAIN, 13);
 	
@@ -26,7 +21,7 @@ public class FormLayout2 extends JPanel {
 	public FormLayout2(
 		LinkedHashMap<String, Component> formContent, 
 		LinkedHashMap<String, Component> innerformContent,
-		JTable table, Consumer<Boolean> submitFunction
+		JTable table, String buttonText, Consumer<Boolean> submitFunction
 	) {
 		setOpaque(false);
 		setLayout(new GridBagLayout());
@@ -72,7 +67,7 @@ public class FormLayout2 extends JPanel {
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 5));
 		buttonPanel.setOpaque(false);
 		buttonPanel.setMinimumSize(new Dimension(240, 40));
-		c.gridx = 0; c.gridy = 2;
+		c.gridx = 0; c.gridy = formContent.size();
 		c.gridwidth = 2; c.weighty = 0;
 		c.fill = GridBagConstraints.NONE;
 		add(buttonPanel, c);
@@ -91,21 +86,21 @@ public class FormLayout2 extends JPanel {
 		// CardLayout panel
 		cardPanel.setLayout(addLayout);
 		cardPanel.setOpaque(false);
-		c.gridx = 0; c.gridy = 3; 
+		c.gridx = 0; c.gridy = formContent.size() + 1; 
 		c.gridwidth = 2; c.weighty = 1.0;
 		c.fill = GridBagConstraints.BOTH;
 		add(cardPanel, c);
 		
-		
 		// Finish Button
 		JButton finishButton = new ColoredButton(
-			"Create Account", Palette.blue, Palette.blueHover, 
+			buttonText, Palette.blue, Palette.blueHover, 
 			new Dimension(140, 30), true, formFont, 
 			e -> submitFunction.accept(cardPanel.getComponent(0).isVisible()));
-		c.gridx = 1; c.gridy = 4;
+		
+		c.gridx = 1; c.gridy = formContent.size() + 2;
 		c.gridwidth = 1; c.weighty = 0;
 		c.fill = GridBagConstraints.NONE;
-		c.anchor = GridBagConstraints.EAST;
+		c.anchor = GridBagConstraints.NORTHEAST;
 		
 		JPanel finishPanel = new JPanel();
 		finishPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));

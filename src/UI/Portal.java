@@ -27,7 +27,14 @@ public class Portal extends JFrame {
 		Exception ok = Database.initialize();
 		
 		// Launch the portal.
-		new Portal(ok);
+		SwingUtilities.invokeLater(
+			new Runnable() {
+				@Override
+				public void run() {
+					new Portal(ok);
+				}
+			}
+		);
 	}
 	
 	public Portal(Exception ok) {

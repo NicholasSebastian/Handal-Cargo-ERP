@@ -30,6 +30,8 @@ public class SliderButton extends JPanel {
 			setSize(buttonSize);
 			setPreferredSize(buttonSize);
 			setMaximumSize(buttonSize);
+			setContentAreaFilled(false);
+			setFocusPainted(false);
 			
 			ImageIcon offIcon = new ImageIcon(this.getClass().getResource("/togglebutton_off.png"));
 			Image scaledOffIcon = offIcon.getImage().getScaledInstance(buttonSize.width, buttonSize.height, Image.SCALE_SMOOTH);

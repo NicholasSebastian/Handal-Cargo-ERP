@@ -31,7 +31,7 @@ public class SeaFreight extends QueryLayout {
 	}
 
 	@Override
-	protected JPanel setModifyPanel() {
+	protected JPanel setModifyPanel(Object selected) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,10 +1,9 @@
 package UI.Components;
 
 import java.awt.*;
-
-// TODO: THIS PAGE
-
 import javax.swing.JPanel;
+
+//	TODO: THIS PAGE
 
 public class FormLayout {
 
