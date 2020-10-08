@@ -23,6 +23,9 @@ public class Palette {
 		sideBarSubButtonColor = new Color(42, 60, 71),
 		sideBarSubButtonHoverColor = new Color(52, 70, 81),
 	
+		tableHeaderColor = new Color(0, 104, 192),
 		tableAlternateColor = new Color(240, 240, 240),
-		tableSelectColor = new Color(15, 133, 254);
+		tableSelectColor = new Color(15, 133, 254),
+		
+		scrollBarColor = new Color(200, 200, 200);
 }

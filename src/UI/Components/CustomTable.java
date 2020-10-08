@@ -3,7 +3,8 @@ package UI.Components;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -26,10 +27,29 @@ public class CustomTable extends JTable {
 		setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
 		    @Override
 		    public Component getTableCellRendererComponent(JTable table, Object value,
-		            boolean isSelected, boolean hasFocus, int row, int column) {
+		            boolean isSelected, boolean hasFocus, int row, int column
+		    ) {
 		    	hasFocus = false;
 		        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		    }
+		});
+		
+		// Disable table dragging.
+		getTableHeader().setReorderingAllowed(false);
+		
+		// Remove table header borders and set color.
+		getTableHeader().setDefaultRenderer(new TableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, 
+					boolean isSelected, boolean hasFocus, int row, int column
+			) {
+				JPanel returnComp = new JPanel();
+				returnComp.setBackground(Palette.tableHeaderColor);
+				JLabel text = new JLabel(value.toString());
+				text.setForeground(Color.WHITE);
+				returnComp.add(text);
+				return returnComp;
+			}
 		});
 	}
 	
@@ -52,7 +72,7 @@ public class CustomTable extends JTable {
         Color whiteColor = Color.WHITE;
         if (!returnComp.getBackground().equals(getSelectionBackground())){
             Color bg = (row % 2 == 0 ? alternateColor : whiteColor);
-            returnComp .setBackground(bg);
+            returnComp.setBackground(bg);
             bg = null;
         }
         return returnComp;

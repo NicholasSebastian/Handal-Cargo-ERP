@@ -15,14 +15,6 @@ import UI.Components.ColoredButton;
 public class Portal extends JFrame {
 	
 	public static void main(String[] args) {
-		// Set the design of UI components.
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		
 		// Initialize connection to database.
 		Exception ok = Database.initialize();
 		

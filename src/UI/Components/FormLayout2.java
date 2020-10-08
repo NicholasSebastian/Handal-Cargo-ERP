@@ -66,13 +66,13 @@ public class FormLayout2 extends JPanel {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 5));
 		buttonPanel.setOpaque(false);
-		buttonPanel.setMinimumSize(new Dimension(240, 40));
+		buttonPanel.setMinimumSize(new Dimension(250, 40));
 		c.gridx = 0; c.gridy = formContent.size();
 		c.gridwidth = 2; c.weighty = 0;
 		c.fill = GridBagConstraints.NONE;
 		add(buttonPanel, c);
 		
-		Dimension buttonSize = new Dimension(110, 30);
+		Dimension buttonSize = new Dimension(120, 30);
 		JButton optionButton = new ColoredButton(
 			"New Staff", Palette.blue, Palette.blueHover, 
 			buttonSize, true, formFont, e -> addLayout.show(cardPanel, "Create"));
@@ -95,10 +95,7 @@ public class FormLayout2 extends JPanel {
 		JButton finishButton = new ColoredButton(
 			buttonText, Palette.blue, Palette.blueHover, 
 			new Dimension(140, 30), true, formFont, 
-			e -> {
-				submitFunction.accept(cardPanel.getComponent(0).isVisible());
-				JOptionPane.showMessageDialog(this.getParent(), "Entry added successfully.");
-			});
+			e -> submitFunction.accept(cardPanel.getComponent(0).isVisible()));
 		
 		c.gridx = 1; c.gridy = formContent.size() + 2;
 		c.gridwidth = 1; c.weighty = 0;
@@ -119,11 +116,7 @@ public class FormLayout2 extends JPanel {
 		formPanel.setLayout(new GridBagLayout());
 		formPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		
-		JScrollPane scrollForm = new JScrollPane(formPanel);
-		scrollForm.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
-		scrollForm.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollForm.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollForm.getVerticalScrollBar().setUnitIncrement(16);
+		JScrollPane scrollForm = new CustomScrollPanel(formPanel);
 		
 		scrollForm.setName("Create");
 		cardPanel.add(scrollForm, scrollForm.getName());
@@ -174,11 +167,8 @@ public class FormLayout2 extends JPanel {
 		header.setBackground(Palette.headerColor);
 		header.setForeground(Color.WHITE);
 		
-		JScrollPane scrollTable = new JScrollPane(this.table);
-		scrollTable.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
-		scrollTable.getViewport().setBackground(Color.WHITE);
+		JScrollPane scrollTable = new CustomScrollPanel(this.table);
 		scrollTable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollTable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		scrollTable.setName("Existing");
 		cardPanel.add(scrollTable, scrollTable.getName());

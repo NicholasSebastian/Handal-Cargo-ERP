@@ -125,10 +125,7 @@ public abstract class QueryLayout extends JPanel {
 			innerPanel.setLayout(new BorderLayout(0, 0));
 			innerPanel.setOpaque(false);
 			
-			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.getViewport().setBackground(Color.WHITE);
-			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			JScrollPane scrollPane = new CustomScrollPanel();
 			scrollPane.setViewportView(table);
 			table.setRowHeight(tableRowHeight);
 			

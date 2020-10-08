@@ -213,6 +213,8 @@ public class Accounts extends QueryLayout {
 							ex.printStackTrace();
 						}
 				});
+				
+				JOptionPane.showMessageDialog(this.getParent(), "Entry added successfully.");
 			}
 			else {
 				int selectedRow = staffTable.getSelectedRow();
@@ -230,6 +232,7 @@ public class Accounts extends QueryLayout {
 								ex.printStackTrace();
 							}
 					});
+					JOptionPane.showMessageDialog(this.getParent(), "Entry added successfully.");
 				}
 				else {
 					JOptionPane.showMessageDialog(

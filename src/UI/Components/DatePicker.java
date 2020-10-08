@@ -15,8 +15,8 @@ public class DatePicker extends JPanel {
 	
 	private final int
 		dateWidth = 20,
-		monthWidth = 70,
-		yearWidth = 30;
+		monthWidth = 80,
+		yearWidth = 40;
 	
 	private CustomComboBox date;
 	private CustomComboBox month;

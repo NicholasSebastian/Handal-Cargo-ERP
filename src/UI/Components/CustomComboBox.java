@@ -28,17 +28,18 @@ public class CustomComboBox extends JComboBox {
 	
 	class CustomRenderer extends DefaultListCellRenderer {
 		@Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus
+        public Component getListCellRendererComponent(JList list, Object value, 
+        		int index, boolean isSelected, boolean cellHasFocus
         ) {
-			JComponent component = (JComponent) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			JLabel component = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 			
-			// TODO: Change combobox background color to white.
-			// TODO: Change the currently selected option font size to be 12.
+			// TODO: Change combobox selected item background color to white.
 			
 			component.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-			((JLabel) component).setPreferredSize(new Dimension(width, height));
-			((JLabel) component).setText(String.valueOf(value));
-			((JLabel) component).setFont(font);
+			component.setPreferredSize(new Dimension(width, height));
+			component.setText(String.valueOf(value));
+			component.setFont(font);
+			component.setBackground(Color.WHITE);
 
             return component;
         }
